@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>共円</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<link rel="stylesheet" href="/css/mobile.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+	<script src="/js/list.js"></script>
+<script>
+function loadStage(stageNo, open) {
+	$('#stages').html('Loading...');
+	$.ajax({
+		type: "POST",
+		url: "/page/list",
+		cache: false,
+		dataType: "json",
+		data: "index=" + stageNo,
+		success: function(result) {
+			var $stages = $('#stages').html('');
+			var $ul = $('<ul />');
+			$ul.appendTo($stages);
+			for (var i = 0; i < result.length; i++) {
+				var $li = $('<li />');
+				$li.addClass('overlayKyouen');
+				$li.appendTo($ul);
+				var $stageno = $('<div />')
+						.text('STAGE:' + result[i].stageNo)
+						.addClass('stageno');
+				$stageno.appendTo($li);
+				var $creator = $('<div />')
+						.addClass('creator')
+						.text('created by ');
+				$('<b />').text(result[i].creator)
+						.appendTo($creator);
+				$creator.appendTo($li);
+				var $canvas = $('<canvas />').attr({
+					id: 'canvas' + result[i].stageNo,
+					width: '252',
+					height: '252',
+					'data-stageno': result[i].stageNo,
+					'data-stage': result[i].stage,
+					'data-size': result[i].size,
+					'data-creator': result[i].creator,
+					'data-clear': result[i].clear,
+				}).addClass('kyouenView');
+				$canvas.appendTo($li);
+			}
+			$("canvas.kyouenView").kyouenView();
+			$(".overlayKyouen").click(function() {
+				$.mobile.changePage($("#stage"), {
+					transition: "slide",
+				});
+				$(this).createPlayableKyouen();
+			});
+			if (open) {
+				$.mobile.changePage($("#stage"), {
+					transition: "slide",
+				});
+				$('#canvas' + open).parent().createPlayableKyouen();
+			}
+		},
+	});
+}
+
+function createSelect(size, index) {
+	$stage_select = $('#stage_select');
+	for (var i = 0; i < size / 10; i++) {
+		var start = i * 10 + 1;
+		var last = start + 9;
+		if (last > size) {
+			last = size;
+		}
+		$stage_select.append($('<option />').attr({
+			value: (start - 1) 
+		}).append(start + ' - ' + last));
+	}
+	$stage_select.val(index);
+	$stage_select.selectmenu('refresh');
+	$stage_select.change(function() {
+		loadStage($('option:selected', this).val());
+	});
+}
+
+// 初期読み込み
+$(function() {
+	loadStage({{ summary.index }}, {{ summary.open }});
+	createSelect({{ summary.count }}, {{ summary.index }});
+});
+</script>
+</head>
+<body>
+<div data-role="page" id="list">
+	<!-- ヘッダ -->
+	<div data-role="header">
+		<h1>共円</h1>
+		<div id="login">
+{% if user %}
+			<img src="{{ user.image }}"
+				width="25"
+				height="25">
+			{{ user.screenName }}&nbsp;|&nbsp;
+			<a href="/page/logout" data-ajax="false">ログアウト</a>
+{% else %}
+			<a href="/page/login" data-ajax="false">Twitterでログイン</a>
+{% endif %}
+		</div>
+	</div>
+
+	<!-- メインコンテンツ -->
+	<div data-role="content">
+		<select id="stage_select">
+		</select>
+		<div id="stages">
+		</div>
+		<div id="overlay"
+				style="position: fixed; bottom: 0; left: 0; right: 0; top: 0; opacity: 0; background-color: #000000; display: none;">
+		</div>
+	</div>
+
+	<!-- フッタ -->
+	<div data-role="footer">
+		<div id="copy">Copyright 2011 noboru</div>
+	</div>
+</div>
+<div data-role="page" id="stage">
+	<!-- ヘッダ -->
+	<div data-role="header">
+		<h1>共円</h1>
+		<div id="login">
+{% if user %}
+			<img src="{{ user.image }}"
+				width="25"
+				height="25">
+			{{ user.screenName }}&nbsp;|&nbsp;
+			<a href="/page/logout" data-ajax="false">ログアウト</a>
+{% else %}
+			<a href="/page/login" data-ajax="false">Twitterでログイン</a>
+{% endif %}
+		</div>
+	</div>
+	
+	<!-- メインコンテンツ -->
+	<div data-role="content">
+		<div id="kyouenView" style="width: 280px; margin: 0 auto; display: none;">
+			<div id="stageno0"></div>
+			<div id="creator0"></div>
+			<canvas id="canvas0" width="252" height="252"></canvas>
+			<input id="kyouenButton" type="button" value="共円！！" />
+		</div>
+	</div>
+	
+	<!-- フッタ -->
+	<div data-role="footer">
+		<div id="copy">Copyright 2011 noboru</div>
+	</div>
+</div>
+</body>
+</html>

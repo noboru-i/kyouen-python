@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>共円</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<link rel="stylesheet" href="/css/mobile.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+</head>
+
+<body>
+<div data-role="page" id="index">
+	<!-- ヘッダ -->
+	<div data-role="header">
+		<h1>共円</h1>
+		<div id="login">
+{% if user %}
+			<img src="{{ user.image }}"
+				width="25"
+				height="25">
+			{{ user.screenName }}&nbsp;|&nbsp;
+			<a href="/page/logout" data-ajax="false">ログアウト</a>
+{% else %}
+			<a href="/page/login" data-ajax="false">Twitterでログイン</a>
+{% endif %}
+		</div>
+	</div>
+
+	<!-- メインコンテンツ -->
+	<div data-role="content">
+		<ul data-role="listview">
+			<li><a href="#application">アプリ紹介</a></li>
+			<li><a rel="external" href="/page/list.html">ステージ一覧</a></li>
+			<li><a title="#工事中">登録データサマリ</a></li>
+		</ul>
+		<h2>共円とは</h2>
+		<p>
+			共円とは、４つの石を通る円のことです。<br>
+			このページでは、盤上に置かれた石から共円を指摘する、<br>
+			「詰め共円」が多数登録されています。<br>
+			ステージ一覧は<a href="/page/list.html">こちら</a>
+		</p>
+		<section>
+			ログインすることでクリアしたステージの保存が出来ます。<br>
+{% if not user %}
+			→<a href="/page/login">Twitterでログイン</a>
+{% endif %}
+		</section>
+	</div>
+
+	<!-- 最近の登録情報 -->
+	<div data-role="collapsible" data-collapsed="true">
+		<h2>最新の登録</h2>
+{% for r in recent %}
+		<div class="item">
+			<a href="{{ r.stageNo|list_link }}">
+				<div class="stageno">
+					STAGE:{{ r.stageNo }}
+				</div>
+			</a>
+			<div class="creator">created by {{ r.creator }}</div>
+			<div class="date">{{ r.registDate|jst|date:"Y/m/d H:i" }}</div>
+		</div>
+{% endfor %}
+	</div>
+	
+	<!-- アクティビティ -->
+	<div data-role="collapsible" data-collapsed="true">
+		<h2>アクティビティ</h2>
+{% for a in activity %}
+		<div class="item">
+			<div class="act_content">
+				<img src="{{ a.user.image }}"
+						width="25"
+						height="25">
+				{{ a.user.screenName }}
+				が<a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
+			</div>
+			<div class="date">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
+		</div>
+{% endfor %}
+	</div>
+
+	<!-- フッタ -->
+	<div data-role="footer">
+		<div id="copy">Copyright 2011 noboru</div>
+	</div>
+</div>
+</body>
+</html>

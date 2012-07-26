@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+article.application_info {
+	border: solid 1px #eee;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+article.application_info>h1 {
+	font-size: 1.5em;
+}
+
+article.application_info a {
+	text-decoration: underline;
+}

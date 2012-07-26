@@ -1,0 +1,22 @@
+@charset "utf-8";
+
+/* reset */
+* {
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clearfix:after {
+	display: block;
+	clear: both;
+	height: 0px;
+	visibility: hidden;
+	content: ".";
+}

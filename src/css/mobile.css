@@ -1,0 +1,84 @@
+@charset "utf-8";
+
+/*
+ * 基本設定
+ */
+ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+/*
+ * ログイン領域
+ */
+div#login {
+	text-align: right;
+}
+
+/*
+ * ステージ一覧
+ */
+div#stages {
+	text-align: center;
+}
+div#stages div.stageno {
+	font-size: 1.2em;
+	font-weight: bold;
+	text-decoration: underline;
+}
+div#stages div.clear {
+	color: #f00;
+}
+div#stages div.creator {
+	text-align: right;
+}
+div#stages>ul>li {
+	border-top: 1px solid #333;
+}
+
+div#kyouenView {
+	text-align: center;
+}
+
+div#kyouenView div#stageno0 {
+	margin-top: 5px;
+	font-size: 2em;
+	font-weight: bold;
+	text-decoration: underline;
+}
+div#kyouenView div#stageno0:before {
+	content: "STAGE:";
+}
+
+div#kyouenView div#stageno0.clear {
+	color: #f00;
+}
+
+div#kyouenView div#creator0 {
+	margin-top: -5px;
+	margin-bottom: 5px;
+	font-size: 1.2em;
+	text-align: right;
+	margin-right: 25px;
+}
+div#kyouenView div#creator0:before {
+	content: "created by ";
+}
+
+div#kyouenView input#kyouenButton {
+	margin-top: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+div#dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	background: #eee;
+	text-align: center;
+	border: 3px solid #333;
+	color: #333;
+}

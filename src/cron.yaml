@@ -1,0 +1,4 @@
+cron:
+- description: hourly tweet job
+  url: /tasks/tweet
+  schedule: every 1 hours
