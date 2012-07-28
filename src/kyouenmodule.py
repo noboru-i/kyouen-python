@@ -9,7 +9,7 @@ Created on 2012/06/21
 
 import logging
 import math
-from numpy import *
+from numpy import array
 
 def getPoints(stoneStr, size=0):
     if (size == 0):
@@ -20,6 +20,7 @@ def getPoints(stoneStr, size=0):
             x = i % size
             y = i / size
             stones.append(array([float(x), float(y)]))
+    logging.debug(str(stones))
     return stones
     
 import itertools
@@ -36,7 +37,7 @@ def isKyouen(stones):
     # p1,p2の垂直二等分線を求める
     l12 = getMidperpendicular(stones[0], stones[1]);
     # p2,p3の垂直二等分線を求める
-    l23 = getMidperpendicular(stones[2], stones[3]);
+    l23 = getMidperpendicular(stones[1], stones[2]);
 
     # 交点を求める
     intersection123 = getIntersection(l12, l23);
@@ -44,7 +45,9 @@ def isKyouen(stones):
         # p1,p2,p3が直線上に存在する場合
         logging.debug('line')
         l34 = getMidperpendicular(stones[2], stones[3]);
+        logging.debug('l34=' + str(l34))
         intersection234 = getIntersection(l23, l34);
+        logging.debug('intersection234=' + str(intersection234))
         if (intersection234 == None):
             # p2,p3,p4が直線状に存在する場合
             return (stones);
