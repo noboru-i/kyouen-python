@@ -4,6 +4,7 @@
 import logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
+from django.utils import simplejson
 
 # 時計回りに90度回転させる。
 def rot(stage, size):
@@ -153,24 +154,42 @@ class KyouenRegist(webapp.RequestHandler):
 
 # 取得処理
 class KyouenGet(webapp.RequestHandler):
-    def generateSendData(self, model):
-        return ','.join([str(model.stageNo), str(model.size), model.stage, model.creator])
 
-    def get(self):
-        stageNo = int(self.request.get('stageNo'))
+    def get(self, dataType=None):
+        logging.debug('dataType=' + str(dataType))
+        stageNo = int(self.request.get('stageNo', '0'))
+        count = int(self.request.get('count', '10'))
 
-        param = '\n'.join([self.generateSendData(m) for m in KyouenPuzzle.gql("WHERE stageNo > :1 ORDER BY stageNo LIMIT 10", stageNo)])
-        if len(param) == 0:
-            # データが取得できなかった場合
-            self.response.headers['Content-Type'] = 'text/plain'
-            self.response.out.write("no_data")
+        data = KyouenPuzzle.all().filter('stageNo >', stageNo).fetch(count)
+
+        if dataType is None:
+            def generateSendData(model):
+                return ','.join([str(model.stageNo), str(model.size), model.stage, model.creator])
+            param = '\n'.join([generateSendData(m) for m in data])
+            if len(param) == 0:
+                # データが取得できなかった場合
+                self.response.headers['Content-Type'] = 'text/plain'
+                self.response.out.write("no_data")
+                return
+            self.response.headers['Content-Type'] = 'text/plain;charset=utf-8'
+            self.response.out.write(param)
             return
-
-        self.response.headers['Content-Type'] = 'text/plain;charset=utf-8'
-        self.response.out.write(param)
-        return
+        elif dataType == 'json':
+            def generateSendData(model):
+                param = {}
+                param['stageNo'] = model.stageNo
+                param['size'] = model.size
+                param['stage'] = model.stage
+                param['creator'] = model.creator
+                return param
+            param = []
+            [param.append(generateSendData(p)) for p in data]
+            self.response.headers['Content-Type'] = 'application/json;charset=utf-8'
+            simplejson.dump(param, self.response.out, ensure_ascii=False)
+            pass
 
 application = webapp.WSGIApplication([('/kyouen/regist', KyouenRegist),
+                                      ('/kyouen/get\.(.*)', KyouenGet),
                                       ('/kyouen/get', KyouenGet),
                                       ], debug=True)
 
