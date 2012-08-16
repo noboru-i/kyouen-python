@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 	<meta charset="UTF-8">
 	<title>{% block title %}{% endblock %}</title>
+	<meta property="og:title" content="共円"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="http://my-android-server.appspot.com/"/>
+	<meta property="og:image" content="http://my-android-server.appspot.com/image/high.png"/>
+	<meta property="og:site_name" content="共円"/>
+	<meta property="fb:app_id" content="232663426789090"/>
+	<meta property="og:description"
+			content="共円とは、４つの石を通る円のことです。
+					このページでは、盤上に置かれた石から共円を指摘する、
+					「詰め共円」が多数登録されています。"/>
 	<link type="text/css" rel="stylesheet" href="/css/base.css" />
 	<link type="text/css" rel="stylesheet" href="/css/style.css" />
 {% block css_include %}{% endblock %}
