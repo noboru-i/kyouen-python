@@ -16,15 +16,6 @@
 		targets.click(function() {
 			createPlayableKyouen($('canvas', this)[0]);
 		});
-		targets.hover(function() {
-			$(this).stop().animate({
-					backgroundColor: "#8ae"
-				}, 200);
-		}, function() {
-			$(this).stop().animate({
-					backgroundColor: "#eee"
-				}, 200);
-		});
 	};
 	
 	$.fn.createPlayableKyouen = function(config) {

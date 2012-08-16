@@ -43,6 +43,12 @@ div#stages>ul>li {
 	padding: 7px;
 	display: inline-block;
 	cursor: pointer;
+	-webkit-transition: background-color 0.2s linear;
+}
+
+div#stages>ul>li:hover {
+	background-color: #8ae;
+	-webkit-transition: background-color 0.2s linear;
 }
 
 /*
