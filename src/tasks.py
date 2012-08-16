@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 #
-from const import Const
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp.util import run_wsgi_app
-from kyouenserver import RegistModel
 import logging
 import tweepy
+from google.appengine.ext import webapp, db
+from google.appengine.ext.webapp.util import run_wsgi_app
+
+from kyouenserver import RegistModel
+from const import Const
 
 # twitterに投稿
 def post_twitter(message):
