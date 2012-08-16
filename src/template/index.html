@@ -4,6 +4,17 @@
 	<link type="text/css" rel="stylesheet" href="/css/index.css" />
 {% endblock %}
 
+{% block script %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=232663426789090";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{% endblock %}
+
 {% block title %}
 共円｜アプリ紹介
 {% endblock %}
@@ -66,5 +77,9 @@
 		<div class="date">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
 	</div>
 {% endfor %}
+</section>
+<!-- facebook Like Box -->
+<section id="fb_section" class="content">
+<div class="fb-like-box" data-href="http://my-android-server.appspot.com/" data-width="292" data-show-faces="true" data-stream="true" data-header="true"></div>
 </section>
 {% endblock %}
