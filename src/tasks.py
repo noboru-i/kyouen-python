@@ -1,22 +1,17 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 #
-import logging
-import tweepy
+from const import Const
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
-
 from kyouenserver import RegistModel
-
-CONSUMER_KEY = 'rZLsot4A7N33lfR3Dj0yw'
-CONSUMER_SECRET = 'jv4SnA6lCMXTPn1GmFjUgPKBb2cIIdayD64nz4Zc'
-ACCESS_KEY = '5021421-F7u70v4wOVFT5f9kdPQThTAn94TMWqcbiwkYKAbNM'
-ACCESS_SECRET = 'hOxMibnKycjCPD00832t6OEI4v6HGtiJOz1xiDFTFI'
+import logging
+import tweepy
 
 # twitterに投稿
 def post_twitter(message):
-    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+    auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
+    auth.set_access_token(Const.ACCESS_KEY, Const.ACCESS_SECRET)
     api = tweepy.API(auth_handler=auth)
     api.update_status(message)
     return

@@ -1,21 +1,19 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
-import os
-import logging
-import Cookie
-import tweepy
-import uuid
+from app import templatefilters
+from const import Const
 from django.utils import simplejson
-from google.appengine.ext import webapp, db
 from google.appengine.api import memcache
+from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
-
 from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
-from app import templatefilters
+import Cookie
+import logging
+import os
+import tweepy
+import uuid
 
-CONSUMER_KEY = ''
-CONSUMER_SECRET = ''
 SESSION_EXPIRE = 60 * 60 * 24 * 60 # 60日
 
 USER_KEY_PREFIX = 'KEY'
@@ -79,7 +77,7 @@ def get_twitter_data(cookie):
         return None
 
     try:
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
         auth.set_access_token(access_token.key, access_token.secret)
         api = tweepy.API(auth_handler=auth)
         me = api.me()
@@ -134,7 +132,7 @@ def is_mobile(handler):
 # ログイン処理
 class OauthLogin(webapp.RequestHandler):
     def get(self):
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
         auth_url = auth.get_authorization_url()
         request_token = RequestToken(token_key=auth.request_token.key, token_secret=auth.request_token.secret)
         request_token.put()
@@ -161,7 +159,7 @@ class OauthLoginCallBack(webapp.RequestHandler):
         request_token = RequestToken.gql("WHERE token_key=:1", request_token_key).get()
         request_token.delete()
 
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
         auth.set_request_token(request_token.token_key, request_token.token_secret)
         access_token = auth.get_access_token(request_verifier)
         cookie = get_cookie()
