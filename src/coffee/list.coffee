@@ -229,7 +229,11 @@ class TumeKyouenView extends KyouenView
   
         $(@model.canvas).attr "data-clear": "1"
         @model.clear = "1"
-        @drawClear $("#canvas" + @model.stageNo)[0], @model
+        # 親canvasにクリア情報を付ける
+        parentCanvas = $("#canvas" + @model.stageNo)
+        if parentCanvas[0]?
+          parentView = new KyouenView(parentCanvas, @model)
+          parentView.drawClear()
         $stageNo.addClass "clear"
         @showDialog "共円！！"
       else
