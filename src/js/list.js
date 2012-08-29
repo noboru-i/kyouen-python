@@ -246,7 +246,7 @@
       });
       $button.unbind("click");
       $button.click(function(e) {
-        var ctx, kyouenData, stoneSize;
+        var ctx, kyouenData, parentCanvas, parentView, stoneSize;
         kyouenData = _this.model.isKyouenSelected();
         $button.disableButton();
         if (kyouenData != null) {
@@ -261,7 +261,11 @@
             "data-clear": "1"
           });
           _this.model.clear = "1";
-          _this.drawClear($("#canvas" + _this.model.stageNo)[0], _this.model);
+          parentCanvas = $("#canvas" + _this.model.stageNo);
+          if (parentCanvas[0] != null) {
+            parentView = new KyouenView(parentCanvas, _this.model);
+            parentView.drawClear();
+          }
           $stageNo.addClass("clear");
           return _this.showDialog("共円！！");
         } else {
