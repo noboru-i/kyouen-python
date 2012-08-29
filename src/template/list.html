@@ -43,13 +43,13 @@ function loadStage(stageNo, open) {
 				var $creator = $('<div />')
 						.addClass('creator')
 						.text('created by ');
-				$('<b />').text(result[i].creator)
+				$('<span />').text(result[i].creator)
 						.appendTo($creator);
 				$creator.appendTo($li);
 				var $canvas = $('<canvas />').attr({
 					id: 'canvas' + result[i].stageNo,
-					width: '252',
-					height: '252',
+					width: '300',
+					height: '300',
 					'data-stageno': result[i].stageNo,
 					'data-stage': result[i].stage,
 					'data-size': result[i].size,
@@ -58,8 +58,8 @@ function loadStage(stageNo, open) {
 				}).addClass('kyouenView');
 				$canvas.appendTo($li);
 			}
-			$("canvas.kyouenView").kyouenView();
-			$(".overlayKyouen").overlayKyouen();
+			$("canvas.kyouenView").kyouen();
+			$(".overlayKyouen").overlayPlayableKyouen();
 			if (open) {
 				$('#canvas' + open).parent().click()
 			}

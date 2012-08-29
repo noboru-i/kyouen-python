@@ -110,8 +110,6 @@ def render_page(handler, page, values=None):
         template_values['user'] = get_user(cookie)
 
     folder = 'template'
-    if is_mobile(handler):
-        folder = 'template_mobile'
     path = os.path.join(os.path.dirname(__file__), folder, page)
     html = template.render(path, template_values)
     handler.response.out.write(html)
