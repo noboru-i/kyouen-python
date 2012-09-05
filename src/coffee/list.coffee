@@ -310,7 +310,7 @@ class TumeKyouenView extends KyouenView
       else
         # 未選択状態に戻す
         @model.stage = @model.stage.replace(/2/g, "1")
-        drawKyouen()
+        @drawKyouen()
         @showDialog "共円ではありません。"
 
   # 共円領域の描画

@@ -363,7 +363,7 @@
           return _this.showDialog("共円！！");
         } else {
           _this.model.stage = _this.model.stage.replace(/2/g, "1");
-          drawKyouen();
+          _this.drawKyouen();
           return _this.showDialog("共円ではありません。");
         }
       });
