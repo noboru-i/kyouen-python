@@ -114,6 +114,12 @@ class KyouenRegist(webapp.RequestHandler):
             return
 
         from kyouenmodule import hasKyouen, getPoints
+        if len(getPoints(data[1], int(data[0]))) <= 4:
+            # 石の数が4以下の場合
+            self.response.headers['Content-Type'] = 'text/plain'
+            self.response.out.write("not enough stone")
+            logging.error('not enough stone.' + data[1])
+            return
         if not hasKyouen(getPoints(data[1], int(data[0]))):
             # 共円でない場合
             self.response.headers['Content-Type'] = 'text/plain'

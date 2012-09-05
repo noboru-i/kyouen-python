@@ -10,6 +10,10 @@ class KyouenView
   # @canvas canvasエレメント
   # @model KyouenModelオブジェクト
   constructor: (@canvas, @model) ->
+    @init()
+
+  # 初期化処理を行う
+  init: ->
 
   # 共円領域の描画
   drawKyouen: ->
@@ -84,6 +88,7 @@ class KyouenView
     stoneSize = @getStoneSize()
     ctx.lineWidth = 5
     ctx.beginPath()
+    ctx.strokeStyle = "rgb(252, 0, 0)"
   
     if kyouenData.isLine
       # 直線の場合
@@ -140,6 +145,42 @@ class KyouenView
     pos.y = Math.ceil(canvasY / stoneSize / 2) - 1
     return pos
 
+  # ダイアログの表示
+  showDialog: (message) ->
+    $dialog = $("#dialog")
+    dialogWidth = $dialog.width()
+    dialogHeight = $dialog.height()
+    $dialog.css
+      width: dialogWidth + "px"
+      height: dialogHeight + "px"
+      marginTop: -dialogHeight / 2 + "px"
+      marginLeft: -dialogWidth / 2 + "px"
+      display: "none"
+
+    $dialogMessage = $("#dialogMessage")
+    $dialogMessage.html message
+    $dialog.click (e) =>
+      if e.target.id is "dialogMessage"
+        @hideDialog()
+  
+    $dialog.hover ()->
+      $dialog.stop().animate {
+          backgroundColor: "#fff"
+          color: "#004C9A"
+        }
+      , 200
+    , ()->
+      $dialog.stop().animate {
+          backgroundColor: "#eee"
+          color: "#333"
+        }
+      , 200
+    $dialog.show 200
+
+  # ダイアログの削除
+  hideDialog: ->
+    $("#dialog")?.hide();
+
 
 # 詰め共円領域の作成
 openKyouen = (canvas) ->
@@ -148,11 +189,6 @@ openKyouen = (canvas) ->
   canvasSize = Math.floor(Math.min(document.body.clientWidth, document.body.clientHeight, document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8)
   canvasSize -= canvasSize % (model.size * 2) # 端数を調整
   $kyouenView = $("#kyouenView")
-
-  unless $kyouenView.length
-    # 存在しない場合、作成
-    @createKyouenView()
-    $kyouenView = $("#kyouenView")
 
   $kyouenView.overlay()
   $stageNo = $("#stageno0")
@@ -189,25 +225,60 @@ openKyouen = (canvas) ->
 
   return $canvas[0]
 
+# 共円作成用クラス
+class CreateKyouenView extends KyouenView
+  constructor: (@config) ->
+    super(@config.canvas, @config.model)
+    @init()
+
+  init: () ->
+    super()
+    @canvas.unbind "click"
+    @canvas.click (e) =>
+      @hideDialog()
+      position = @adjust(e, @model)
+      @model.put position.x, position.y
+      @drawKyouen()
+      positions = @model.getSelectedStonePositions('1')
+      if positions.length >= 4
+        kyouenData = @model.isKyouenSelected('1')
+        if kyouenData?
+          # 共円が発生
+          for p in kyouenData.points
+            index = @model.position2Index p.x, p.y
+            @model.stage = @model.stage.replaceCharAt index, '2'
+            @drawKyouen()
+          ctx = @canvas[0].getContext("2d")
+          @drawKyouenData ctx, kyouenData
+          @showDialog "共円！！"
+          @canvas.unbind "click"
+          @config.onKyouen? @model
+      @config.onChange? @model
+
+  reset: () ->
+    @hideDialog()
+    @model.resetStage()
+    @init()
+    @drawKyouen()
+
 # 詰め共円用クラス
 class TumeKyouenView extends KyouenView
   constructor: (@canvas, @model) ->
     super(@canvas, @model)
+    @init()
 
-  # 共円領域の描画
-  drawKyouen: () ->
+  init: () ->
+    super()
     # イベントを設定
     $button = $("#kyouenButton")
     $dialog = $("#dialog")
 
     @canvas.unbind "click"
     @canvas.click (e) =>
-      $dialog = $("#dialog")
-      if $dialog.length
-        $dialog.remove()
+      @hideDialog()
       position = @adjust(e, @model)
       @model.select position.x, position.y
-      super @canvas, @model
+      @drawKyouen()
       positions = @model.getSelectedStonePositions()
       if positions.length is 4
         $button.enableButton()
@@ -222,7 +293,6 @@ class TumeKyouenView extends KyouenView
         # 共円の場合
         @canvas.unbind "click"
         ctx = @canvas[0].getContext("2d")
-        stoneSize = @getStoneSize()
         @drawKyouenData ctx, kyouenData
         $.post "/page/add",
           stageNo: @model.stageNo
@@ -234,84 +304,23 @@ class TumeKyouenView extends KyouenView
         if parentCanvas[0]?
           parentView = new KyouenView(parentCanvas, @model)
           parentView.drawClear()
+        $stageNo = $("#stageno0")
         $stageNo.addClass "clear"
         @showDialog "共円！！"
       else
         # 未選択状態に戻す
         @model.stage = @model.stage.replace(/2/g, "1")
-        super()
+        drawKyouen()
         @showDialog "共円ではありません。"
-    $dialog.remove()
-  
-    # 共円を描画
+
+  # 共円領域の描画
+  drawKyouen: () ->
     super()
     $stageNo = $("#stageno0")
     if @model.clear is "1"
       $stageNo.addClass "clear"
     else
       $stageNo.removeClass "clear"
-    
-
-  # ダイアログの表示
-  showDialog: (message) ->
-    dialogWidth = $("#kyouenView").width() - 10
-    dialogHeight = 100
-    $dialog = $("#dialog")
-    $dialogMessage = $("#dialogMessage")
-    unless $dialog.length
-      $dialog = $("<div />").attr(id: "dialog")
-      $dialog.appendTo $("#kyouenView")
-      $dialogMessage = $("<div />").attr(id: "dialogMessage").css(lineHeight: dialogHeight + "px").html(message)
-      $dialogMessage.appendTo $dialog
-    $dialog.css
-      width: dialogWidth + "px"
-      height: dialogHeight + "px"
-      marginTop: -dialogHeight / 2 + "px"
-      marginLeft: -dialogWidth / 2 + "px"
-      display: "none"
-  
-    $dialogMessage.html message
-    $dialog.click (e) ->
-      $dialog.remove()
-  
-    $dialog.hover ()->
-      $dialog.stop().animate {
-          backgroundColor: "#fff"
-          color: "#004C9A"
-        }
-      , 200
-      $dialog.css textDecoration: "underline"
-    , ()->
-      $dialog.stop().animate {
-          backgroundColor: "#eee"
-          color: "#333"
-        }
-      , 200
-      $dialog.css textDecoration: "none"
-    $dialog.show 200
-
-  # ダイアログの削除
-  removeDialog: ->
-    $dialog = $("#dialog")
-    return  unless $dialog
-    $dialog.remove()
-
-  # プレイ用共円エレメントの作成
-  createKyouenView: ->
-    $kyouenView = $("<div />").attr(id: "kyouenView")
-    $kyouenView.appendTo $("body")
-    $stageNo = $("<div />").attr(id: "stageno0")
-    $stageNo.appendTo $kyouenView
-    $creator = $("<div />").attr(id: "creator0")
-    $creator.appendTo $kyouenView
-    $canvas = $("<canvas />").attr(id: "canvas0")
-    $canvas.appendTo $kyouenView
-    $button = $("<input />").attr(
-      id: "kyouenButton"
-      type: "button"
-      value: "共円！！"
-    )
-    $button.appendTo $kyouenView
 
 # 共円クラスの定義
 class KyouenModel
@@ -336,18 +345,34 @@ class KyouenModel
     c = @stage.charAt(index)
     if c is "1"
       @stage = @stage.replaceCharAt(index, "2")
-    else @stage = @stage.replaceCharAt(index, "1")  if c is "2"
+    else if c is "2"
+      @stage = @stage.replaceCharAt(index, "1")
+
+  # 指定された位置に石を設定
+  put: (x, y) ->
+    index = @position2Index(x, y)
+    c = @stage.charAt(index)
+    if c is "0"
+      @stage = @stage.replaceCharAt(index, "1")
 
   # 共円が選択されている場合、trueを返却
-  isKyouenSelected: ->
-    selectedStonePositions = @getSelectedStonePositions()
+  isKyouenSelected: (stone = "2")->
+    selectedStonePositions = @getSelectedStonePositions(stone)
     if selectedStonePositions.length < 4
       return null
-    p1 = selectedStonePositions[0]
-    p2 = selectedStonePositions[1]
-    p3 = selectedStonePositions[2]
-    p4 = selectedStonePositions[3]
-    
+    for i in [0..(selectedStonePositions.length-4)]
+      p1 = selectedStonePositions[i];
+      for j in [(i+1)..(selectedStonePositions.length-3)]
+        p2 = selectedStonePositions[j];
+        for k in [(j+1)..(selectedStonePositions.length-2)]
+          p3 = selectedStonePositions[k];
+          for l in [(k+1)..(selectedStonePositions.length-1)]
+            p4 = selectedStonePositions[l];
+            data = @isKyouen p1, p2, p3, p4
+            if data != null
+              return data
+
+  isKyouen: (p1, p2, p3, p4) ->
     # p1,p2の垂直二等分線を求める
     l12 = p1.getMidperpendicular(p2)
     
@@ -372,11 +397,12 @@ class KyouenModel
     return null
 
   # 選択されている石の座標を返却
-  getSelectedStonePositions: ->
+  getSelectedStonePositions: (stone = "2")->
     stoneArray = []
     for i in [0..@size*@size]
       c = @stage.charAt(i)
-      stoneArray.push @index2Position(i)  if c is "2"
+      if c is stone
+        stoneArray.push @index2Position(i)
     return stoneArray
 
   # 交点を求める
@@ -392,6 +418,32 @@ class KyouenModel
     dy = l2.p1.y - l1.p1.y
     t1 = (f2 * dy - g2 * dx) / det
     return new Point(l1.p1.x + f1 * t1, l1.p1.y + g1 * t1)
+
+  # 石が置かれているか判定する
+  hasStone: (stone='1')->
+    @stage.indexOf(stone) isnt -1
+
+  # 石の配置を初期化する
+  resetStage: () ->
+    @stage = '000000000000000000000000000000000000'
+
+  # 送信する
+  sendStage: () ->
+    url = '/kyouen/regist'
+    tmpStage = @stage.replace /2/g, '1'
+    param = 
+      data: [@size, tmpStage, @creator].join(',')
+    callback = (data) ->
+      reg = new RegExp('success stageNo=([0-9]*)');
+      if not data.match reg
+        if data is 'registered'
+          alert '登録済みです。'
+          return
+        alert '送信に失敗しました。'
+        return
+      alert '送信しました。ステージ番号=' + data.replace reg, '$1'
+
+    $.post url, param, callback
 
 # 点情報オブジェクト
 class Point
@@ -451,12 +503,14 @@ class KyouenData
 $ = jQuery
 $.fn.extend
   kyouen: (config) ->
+    views = [];
     for c in $(this)
       k = new KyouenModel(c)
       view = new KyouenView($(c), k)
       view.drawKyouen()
       view.drawClear()
-    return this
+      views.push view
+    views
 
   overlayPlayableKyouen: (config) ->
     this.click ->
@@ -465,6 +519,7 @@ $.fn.extend
       view = new TumeKyouenView($(c), k)
       view.drawKyouen()
       view.drawClear()
+      view
 
   tumeKyouen: (config) ->
     c = $("canvas", this)[0]
@@ -472,6 +527,18 @@ $.fn.extend
     view = new TumeKyouenView($(c), k)
     view.drawKyouen()
     view.drawClear()
+    view
+
+  createKyouen: (config) ->
+    c = this[0]
+    k = new KyouenModel(c)
+    config = $.extend
+      canvas: $(c)
+      model: k
+      , config;
+    view = new CreateKyouenView(config)
+    view.drawKyouen()
+    view
 
   disableButton: (config) ->
     if @button
@@ -480,7 +547,7 @@ $.fn.extend
       @button "refresh"
     else
       @attr disabled: "disabled"
-    return this
+    this
 
   enableButton: (config) ->
     if @button
@@ -488,4 +555,4 @@ $.fn.extend
       @button "enable"
     else
       @removeAttr "disabled"
-    return this
+    this

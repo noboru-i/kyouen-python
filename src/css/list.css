@@ -102,6 +102,8 @@ div#dialog {
 	border: 3px solid #333;
 	color: #333;
 	font-size: 2em;
+	height: 100px;
+	line-height: 100px;
 }
 
 div#notification {
