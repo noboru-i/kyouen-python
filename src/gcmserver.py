@@ -68,6 +68,7 @@ class GcmUnregist(webapp.RequestHandler):
             # モデルが取得できなかった場合
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.out.write('empty')
+            return
         model.delete()
 
         # レスポンスの返却
