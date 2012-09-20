@@ -12,8 +12,8 @@ from gcmserver import GcmModel
 
 # twitterに投稿
 def post_twitter(message):
-    auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
-    auth.set_access_token(Const.ACCESS_KEY, Const.ACCESS_SECRET)
+    auth = tweepy.OAuthHandler(Const.TWITTER_SHARE_CONSUMER_KEY, Const.TWITTER_SHARE_CONSUMER_SECRET)
+    auth.set_access_token(Const.TWITTER_SHARE_ACCESS_KEY, Const.TWITTER_SHARE_ACCESS_SECRET)
     api = tweepy.API(auth_handler=auth)
     api.update_status(message)
     return
