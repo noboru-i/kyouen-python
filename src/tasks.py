@@ -8,6 +8,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from kyouenserver import RegistModel
 from const import Const
+from gcmserver import GcmModel
 
 # twitterに投稿
 def post_twitter(message):
@@ -16,6 +17,34 @@ def post_twitter(message):
     api = tweepy.API(auth_handler=auth)
     api.update_status(message)
     return
+
+
+def sendGcm(gcmModel):
+    from google.appengine.api import urlfetch
+    import urllib
+
+    form_fields = {
+                   "registration_id": gcmModel.registrationId,
+                   "collapse_key": "update",
+                   "data.message": "gcm message!!!"
+    }
+    form_data = urllib.urlencode(form_fields)
+    result = urlfetch.fetch(url='https://android.googleapis.com/gcm/send',
+                            payload=form_data,
+                            method=urlfetch.POST,
+                            headers={
+                                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                                     'Authorization': 'key=' + Const.GCM_API_KEY
+                                     })
+    logging.debug('regId=' + gcmModel.registrationId + ', statusCode=' + str(result.status_code))
+    return result
+
+def sendGcmAll():
+    query = GcmModel.all()
+    for m in query:
+        sendGcm(m)
+
+    return True
 
 
 class TweetTask(webapp.RequestHandler):
@@ -55,6 +84,9 @@ class TweetTask(webapp.RequestHandler):
                 db.delete(m)
         except:
             pass
+        
+        # GCMで送信
+        sendGcmAll()
         return
 
 application = webapp.WSGIApplication([('/tasks/tweet', TweetTask),
