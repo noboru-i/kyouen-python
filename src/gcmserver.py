@@ -36,7 +36,16 @@ class GcmRegist(webapp.RequestHandler):
             self.response.out.write('empty')
             return
 
-        # 入力データの登録    
+        # 既に登録されているか確認
+        model = GcmModel.gql("WHERE registrationId = :1", regId).get()
+        if (model is not None):
+            # レスポンスの返却
+            self.response.content_type = 'application/json'
+            responseJson = {'message': 'already registed'}
+            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            return
+        
+        # 入力データの登録
         model = GcmModel(registrationId=regId)
         model.put()
 
