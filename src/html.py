@@ -5,6 +5,7 @@ import logging
 import Cookie
 import tweepy
 import uuid
+import datetime
 from django.utils import simplejson
 from google.appengine.ext import webapp, db
 from google.appengine.api import memcache
@@ -44,7 +45,7 @@ class User(db.Model):
 class StageUser(db.Model):
     stage = db.ReferenceProperty(reference_class=KyouenPuzzle, required=True)
     user = db.ReferenceProperty(reference_class=User, required=True)
-    clearDate = db.DateTimeProperty(auto_now=True, required=True)
+    clearDate = db.DateTimeProperty(required=True)
 
 # cookieの取得
 def get_cookie():
@@ -175,6 +176,98 @@ class OauthLoginCallBack(webapp.RequestHandler):
 
         self.redirect('/')
 
+# APIでのログイン処理
+class ApiLogin(webapp.RequestHandler):
+    def post(self):
+        request_token = self.request.get("token")
+        request_token_secret = self.request.get('token_secret')
+        if not request_token:
+            self.response.content_type = 'application/json'
+            responseJson = {'message': 'invalid parameter'}
+            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            return
+
+        # memcacheへ認証情報を設定
+        from tweepy import oauth
+        access_token = oauth.OAuthToken(request_token, request_token_secret)
+        cookie = set_uuid(self)
+        memcache.set(cookie['sid'].value, access_token, SESSION_EXPIRE) #@UndefinedVariable
+
+        # DBへユーザ情報を登録
+        twitter_user = get_twitter_data(cookie)
+        user = User.get_or_insert(key_name=User.create_key(twitter_user['id']),
+                                  userId=twitter_user['id'])
+        user.accessToken = access_token.key
+        user.accessSecret = access_token.secret
+        user.screenName=twitter_user['screen_name']
+        user.image=twitter_user['profile_image_url']
+        user.put()
+
+        self.response.content_type = 'application/json'
+        responseJson = {'message': 'success',
+                        'user': {'id': user.userId,
+                                 'image': user.image}}
+        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        return
+
+# クリア情報の追加
+# @param data: [
+#   {
+#     "stageNo": 1,
+#     "clearDate": "2012-01-01 00:00:00"
+#   }
+# ]
+class AddAllStageUser(webapp.RequestHandler):
+    def post(self):
+        data = simplejson.loads(self.request.get('data'))
+
+        # ユーザ情報を取得
+        cookie = get_cookie()
+        user = get_user(cookie)
+        if not user:
+            responseJson = {'message' : 'not authentication'}
+            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            return
+        # 送信されたステージ情報を登録
+        clearStageNoList = [];
+        for stage in data:
+            stageNo = strToInt(stage['stageNo'])
+            clearDate = stage['clearDate']
+            logging.info('stageNo=' + str(stageNo))
+            # クリアステージ追加
+            if stageNo is 0:
+                logging.error('invalid parameter')
+                continue
+            stage = KyouenPuzzle.all().filter('stageNo =', stageNo).get()
+            stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage, user).get()
+            if not stage_user:
+                # 存在しない場合は新規作成
+                stage_user = StageUser(stage = stage,
+                                       user = user,
+                                       clearDate = datetime.datetime.strptime(clearDate, '%Y-%m-%d %H:%M:%S'))
+                # 新規クリア時はUser.clearStageCountをインクリメント
+                count = user.clearStageCount
+                if not count:
+                    count = StageUser.gql('WHERE user = :1', user).count()
+                user.clearStageCount = count + 1
+                user.put()
+            stage_user.clearDate = datetime.datetime.strptime(clearDate, '%Y-%m-%d %H:%M:%S')
+            stage_user.put()
+            clearStageNoList.append(stageNo)
+
+        # 送信されていないステージ情報を返す
+        stageUsers = StageUser.gql('WHERE user = :1', user)
+        syncStageList = []
+        for stageUser in stageUsers:
+            stage = stageUser.stage
+            if stage.stageNo not in clearStageNoList:
+                syncStageList.append({'stageNo' : stage.stageNo,
+                                      'clearDate' : stageUser.clearDate.strftime('%Y-%m-%d %H:%M:%S')})
+        responseJson = {'message' : 'success',
+                        'data' : syncStageList}
+        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        return
+
 # リスト表示
 class ListPage(webapp.RequestHandler):
     def get(self):
@@ -229,6 +322,9 @@ class AddStageUser(webapp.RequestHandler):
     def post(self):
         stageNo = strToInt(self.request.get("stageNo"))
         logging.info('stageNo=' + str(stageNo))
+        if stageNo is 0:
+            logging.error('invalid parameter')
+            return
         stage = KyouenPuzzle.all().filter('stageNo =', stageNo).get()
         cookie = get_cookie()
         user = get_user(cookie)
@@ -241,7 +337,8 @@ class AddStageUser(webapp.RequestHandler):
         if not stage_user:
             # 存在しない場合は新規作成
             stage_user = StageUser(stage=stage,
-                                   user=user)
+                                   user=user,
+                                   clearDate = datetime.datetime.today())
             # 新規クリア時はUser.clearStageCountをインクリメント
             count = user.clearStageCount
             if not count:
@@ -299,6 +396,8 @@ application = webapp.WSGIApplication([('/', IndexPage),
                                       ('/page/login', OauthLogin),
                                       ('/page/login_callback', OauthLoginCallBack),
                                       ('/page/logout', OauthLogout),
+                                      ('/page/api_login', ApiLogin),
+                                      ('/page/add_all', AddAllStageUser),
                                       ('/page/(.*)', StaticPage),
                                       ], debug=True)
 

@@ -21,5 +21,6 @@
 <path>${GOOGLE_APP_ENGINE}/lib/protorpc</path>
 <path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>
 <path>${GOOGLE_APP_ENGINE}/lib/yaml/lib</path>
+<path>/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/numpy</path>
 </pydev_pathproperty>
 </pydev_project>
