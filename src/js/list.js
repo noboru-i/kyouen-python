@@ -321,6 +321,7 @@
       var $button, $dialog,
         _this = this;
       TumeKyouenView.__super__.init.call(this);
+      this.hideDialog();
       $button = $("#kyouenButton");
       $dialog = $("#dialog");
       this.canvas.unbind("click");

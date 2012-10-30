@@ -269,6 +269,7 @@ class TumeKyouenView extends KyouenView
 
   init: () ->
     super()
+    @hideDialog()
     # イベントを設定
     $button = $("#kyouenButton")
     $dialog = $("#dialog")
