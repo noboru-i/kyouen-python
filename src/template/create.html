@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block css_include %}
-	<link type="text/css" rel="stylesheet" href="/css/create.css" />
+  <link type="text/css" rel="stylesheet" href="/css/create.css" />
 {% endblock %}
 {% block script_include %}
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="/js/jquery.color.js"></script>
-	<script src="/js/list.js"></script>
-	<script src="/js/overlay.js"></script>
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="/js/jquery.color.js"></script>
+  <script src="/js/list.js"></script>
+  <script src="/js/overlay.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -21,54 +21,71 @@
 <script type="text/javascript">
 // 初期読み込み
 $(function() {
-	view = $("canvas.kyouenView").createKyouen({
-		onChange: function(model) {
-			if (model.hasStone('1')) {
-				$('#reset_button').enableButton();
-			}
-		},
-		onKyouen: function(model) {
-			$('#send_button').enableButton();
-		}
-	});
-	$('#reset_button').click(function() {
-		view.reset();
-		$(this).disableButton();
-	});
-	$('#send_button').click(function() {
-		if ($('#name').val().length == '0') {
-			alert('名前を入力してください。');
-			return;
-		}
-		view.model.creator = $('#name').val();
-		view.model.sendStage();
-		view.hideDialog();
-	});
+  view = $("canvas.kyouenView").createKyouen({
+    onChange: function(model) {
+      if (model.hasStone('1')) {
+        $('#reset_button').enableButton();
+      }
+    },
+    onKyouen: function(model) {
+      if (model.getStoneCount() > 4) {
+        $('#name_label').show();
+        $('#name').show();
+        $('#send_button').enableButton();
+        $('#send_button').show();
+      } else {
+        $('#name_label').hide();
+        $('#name').hide();
+        $('#send_button').hide();
+      }
+    }
+  });
+  $('#reset_button').click(function() {
+    view.reset();
+    $(this).disableButton();
+  });
+  $('#send_button').click(function() {
+    if ($('#name').val().length == '0') {
+      alert('名前を入力してください。');
+      return;
+    }
+    view.model.creator = $('#name').val();
+    view.model.sendStage();
+    view.hideDialog();
+  });
+  $('#size_select').change(function(){
+    view.model.size = $(this).val();
+    view.reset();
+  });
 });
 </script>
 {% endblock %}
 
 {% block content %}
 <div id="stages">
-	<h2>ステージを作成できます。</h2>
-	<div id="kyouenView">
-		<canvas id="canvas0" width="600" height="600" data-stageno="0" data-stage="000000000000000000000000000000000000" data-size="6" data-creator="" data-clear="0" class="kyouenView"></canvas>
-		<input id="reset_button" type="button" value="リセット" disabled="disabled" />
-		<div id="dialog" style="display: none; width: 620px;">
-			<div id="dialogMessage"></div>
-			<label for="name">名前：</label>
-			<input id="name" type="text" size="20" maxlength="20" />
-			<input id="send_button" type="button" value="送信" disabled="disabled" />
-		</div>
-	</div>
+  <h2>ステージを作成できます。</h2>
+  <div id="kyouenView">
+    <canvas id="canvas0" width="612" height="612" data-stageno="0" data-stage="000000000000000000000000000000000000" data-size="6" data-creator="" data-clear="0" class="kyouenView"></canvas>
+    <select id="size_select">
+      <option value="6">6x6</option>
+      <option value="9">9x9</option>
+    </select>
+    <input id="reset_button" type="button" value="リセット" disabled="disabled" />
+    <div id="dialog" style="display: none; width: 620px;">
+      <div id="dialogMessage"></div>
+      <label id="name_label" for="name">名前：</label>
+      <input id="name" type="text" size="20" maxlength="20" />
+      <input id="send_button" type="button" value="送信" disabled="disabled" />
+    </div>
+  </div>
 </div>
 
 
 {% if not user %}
-	<!-- 通知領域 -->
-	<div id="notification">
-		ログインすることで<br>クリア履歴を保存出来ます<br>
-		<a href="/page/login"><img src="/image/sign-in-with-twitter_0.png" width="80%"></a>
-	</div>
+  <!-- 通知領域 -->
+  <div id="notification">
+    ログインすることで<br>クリア履歴を保存出来ます<br>
+    <a href="/page/login"><img src="/image/sign-in-with-twitter_0.png" width="80%"></a>
+  </div>
 {% endif %}
 {% endblock %}

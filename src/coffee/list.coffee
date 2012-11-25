@@ -426,7 +426,10 @@ class KyouenModel
 
   # 石の配置を初期化する
   resetStage: () ->
-    @stage = '000000000000000000000000000000000000'
+    if @size is 6
+      @stage = '000000000000000000000000000000000000'
+    else
+      @stage = '000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 
   # 送信する
   sendStage: () ->
@@ -445,6 +448,13 @@ class KyouenModel
       alert '送信しました。ステージ番号=' + data.replace reg, '$1'
 
     $.post url, param, callback
+
+  # 石の数を返す
+  getStoneCount: () ->
+    # 0以外の文字列長を返す
+    stage = @stage.replace /0/g, ''
+    count = stage.length
+    count
 
 # 点情報オブジェクト
 class Point

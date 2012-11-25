@@ -510,7 +510,11 @@
     };
 
     KyouenModel.prototype.resetStage = function() {
-      return this.stage = '000000000000000000000000000000000000';
+      if (this.size === 6) {
+        return this.stage = '000000000000000000000000000000000000';
+      } else {
+        return this.stage = '000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+      }
     };
 
     KyouenModel.prototype.sendStage = function() {
@@ -534,6 +538,13 @@
         return alert('送信しました。ステージ番号=' + data.replace(reg, '$1'));
       };
       return $.post(url, param, callback);
+    };
+
+    KyouenModel.prototype.getStoneCount = function() {
+      var count, stage;
+      stage = this.stage.replace(/0/g, '');
+      count = stage.length;
+      return count;
     };
 
     return KyouenModel;
