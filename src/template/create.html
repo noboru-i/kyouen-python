@@ -4,7 +4,6 @@
   <link type="text/css" rel="stylesheet" href="/css/create.css" />
 {% endblock %}
 {% block script_include %}
-  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   <script src="/js/jquery.color.js"></script>
   <script src="/js/list.js"></script>
   <script src="/js/overlay.js"></script>
@@ -12,9 +11,6 @@
 
 {% block title %}
 共円｜ステージ作成
-{% endblock %}
-{% block head_title %}
-｜ステージ作成
 {% endblock %}
 
 {% block script %}
@@ -62,30 +58,38 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-<div id="stages">
-  <h2>ステージを作成できます。</h2>
-  <div id="kyouenView">
-    <canvas id="canvas0" width="612" height="612" data-stageno="0" data-stage="000000000000000000000000000000000000" data-size="6" data-creator="" data-clear="0" class="kyouenView"></canvas>
-    <select id="size_select">
-      <option value="6">6x6</option>
-      <option value="9">9x9</option>
-    </select>
-    <input id="reset_button" type="button" value="リセット" disabled="disabled" />
-    <div id="dialog" style="display: none; width: 620px;">
-      <div id="dialogMessage"></div>
-      <label id="name_label" for="name">名前：</label>
-      <input id="name" type="text" size="20" maxlength="20" />
-      <input id="send_button" type="button" value="送信" disabled="disabled" />
+<div class="container">
+  <h2>ステージ作成</h2>
+  <hr>
+  <div id="stages">
+    <div id="kyouenView">
+      <canvas id="canvas0" width="612" height="612" data-stageno="0" data-stage="000000000000000000000000000000000000" data-size="6" data-creator="" data-clear="0" class="kyouenView"></canvas>
+      <select id="size_select">
+        <option value="6">6x6</option>
+        <option value="9">9x9</option>
+      </select>
+      <a id="reset_button" class="btn btn-primary disabled" >リセット</a>
+      <div id="dialog" style="display: none; width: 620px;">
+        <h2 id="dialogMessage" style="margin-top: 20px; margin-bottom: 50px;"></h2>
+        <form class="form-horizontal">
+        <div class="control-group info">
+          <label id="name_label" class="control-label" for="name">Name:</label>
+          <div class="controls text-left">
+            <input type="text" id="name">
+            <a id="send_button" class="btn btn-primary disabled">送信</a>
+          </div>
+        </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-
 
 {% if not user %}
   <!-- 通知領域 -->
   <div id="notification">
     ログインすることで<br>クリア履歴を保存出来ます<br>
-    <a href="/page/login"><img src="/image/sign-in-with-twitter_0.png" width="80%"></a>
+    <a href="/page/login" class="btn btn-primary btn-large">Sign in with twitter »</a>
   </div>
 {% endif %}
 {% endblock %}

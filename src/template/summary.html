@@ -1,17 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block css_include %}
-	<link type="text/css" rel="stylesheet" href="/css/summary.css" />
 {% endblock %}
 {% block script_include %}
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 {% endblock %}
 
 {% block title %}
-共円｜登録データサマリ
-{% endblock %}
-{% block head_title %}
-｜登録データサマリ
+共円｜ランキング
 {% endblock %}
 
 {% block script %}
@@ -25,15 +20,16 @@ function loadCleared(stageNo, open) {
 		dataType: "json",
 		success: function(result) {
 			var $ranking = $('#ranking').html('');
-			var $table = $('<table />');
+			var $table = $('<table />').addClass('table').addClass('table-striped').addClass('table-bordered');
 			$ranking.append($table);
-			$table.append($('<tr><th class="order">順位</th><th colspan="2" class="name">名前</th><th class="count">クリア数</th></tr>'));
+			$table.append($('<thead><tr><th class="order">順位</th><th colspan="2" class="name">名前</th><th class="count">クリア数</th></tr></thead>'));
+			var $tbody = $('<tbody />').appendTo($table);
 			for (var i = 0; i < result.length; i++) {
 				var $tr = $('<tr />');
-				$table.append($tr);
+				$tbody.append($tr);
 				var $order = $('<td />').addClass('order').text((i + 1) + '位');
 				$tr.append($order);
-				var $image = $('<td />').addClass('image').append($('<img />').attr({
+				var $image = $('<td />').addClass('image').attr('width', '50px').append($('<img />').attr({
 					src: result[i].image,
 					width: '48px',
 					height: '48px',
@@ -55,9 +51,11 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+<div class="container">
 <article class="summary">
-	<h1>クリアステージ数ランキング</h1>
+	<h2>クリアステージ数ランキング</h2>
 	<div id="ranking">
 	</div>
 </article>
+</div>
 {% endblock %}

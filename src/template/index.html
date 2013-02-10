@@ -1,85 +1,69 @@
 {% extends 'layout.html' %}
 
 {% block css_include %}
-	<link type="text/css" rel="stylesheet" href="/css/index.css" />
 {% endblock %}
 
 {% block script %}
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=232663426789090";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 {% endblock %}
 
 {% block title %}
-共円｜アプリ紹介
-{% endblock %}
-{% block head_title %}
-｜アプリ紹介
+共円
 {% endblock %}
 
 {% block content %}
 <!-- メインコンテンツ -->
-<article id="main">
-	<section>
-		共円とは、４つの石を通る円のことです。<br>
-		このページでは、盤上に置かれた石から共円を指摘する、<br>
-		「詰め共円」が多数登録されています。<br>
-		ステージ一覧は<a href="/page/list.html">こちら</a>
-	</section>
-	<section>
-		ログインすることでクリアしたステージの保存が出来ます。<br>
-{% if not user %}
-		<a href="/page/login"><img src="image/sign-in-with-twitter_0.png" width="30%"></a>
-{% endif %}
-	</section>
-	<section class="buttons">
-<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="ja">ツイート</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-<br>
-<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fmy-android-server.appspot.com%2F&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=232663426789090" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
-<br>
-<div data-plugins-type="mixi-favorite" data-service-key="03f014d788ea806c3810ac09ace4ba2c1d2471e7" data-href="" data-show-faces="false" data-show-count="true" data-show-comment="true" data-width="135"></div><script type="text/javascript">(function(d) {var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = 'http://static.mixi.jp/js/plugins.js#lang=ja';d.getElementsByTagName('head')[0].appendChild(s);})(document);</script>
-	</section>
-</article>
-
-<!-- 最近の登録情報 -->
-<section id="recent_regist" class="content">
-	<h2>最新の登録</h2>
+<div class="container">
+  <div class="hero-unit">
+    <h1>共円</h1>
+    <p>共円とは、４つの石を通る円のことです。<br>
+    このページでは、盤上に置かれた石から共円を指摘する、「詰め共円」が多数登録されています。<br>
+    ステージ一覧は <a href="/page/list.html" class="btn btn-mini btn-success">こちら »</a></p>
+    <p>ログインすることでクリアしたステージ情報が保存出来ます。<br>
+      <a href="/page/login" class="btn btn-primary btn-large">Sign in with twitter »</a>
+    </p>
+  </div>
+  <div class="row">
+    <div class="span1"></div>
+    <div class="span4">
+      <h2>最新の登録</h2>
+      <table class="table table-striped" style="width:100%">
+        <tbody>
 {% for r in recent %}
-	<div class="item">
-		<a href="{{ r.stageNo|list_link }}">
-			<div class="stageno">
-				STAGE:{{ r.stageNo }}
-			</div>
-		</a>
-		<div class="creator">created by {{ r.creator }}</div>
-		<div class="date">{{ r.registDate|jst|date:"Y/m/d H:i" }}</div>
-	</div>
+      <tr>
+        <td>
+          <a href="{{ r.stageNo|list_link }}">
+            <span>STAGE:{{ r.stageNo }}</span>
+          </a>
+          <div class="creator text-right">created by {{ r.creator }}</div>
+          <div class="date text-right">{{ r.registDate|jst|date:"Y/m/d H:i" }}</div>
+        </td>
+      </tr>
 {% endfor %}
-</section>
-
-<!-- アクティビティ -->
-<section id="activity" class="content">
-	<h2>アクティビティ</h2>
+        </tbody>
+      </table>
+    </div>
+    <div class="span2"></div>
+    <div class="span4">
+      <h2>アクティビティ</h2>
+      <table class="table table-striped" style="width:100%">
+        <tbody>
 {% for a in activity %}
-	<div class="item">
-		<div class="act_content">
-			<img src="{{ a.user.image }}"
-					width="25"
-					height="25">
-			{{ a.user.screenName }}
-			が<a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
-		</div>
-		<div class="date">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
-	</div>
+      <tr>
+        <td>
+        <div class="act_content">
+          <img src="{{ a.user.image }}" width="25" height="25">
+          {{ a.user.screenName }}
+          が<a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
+        </div>
+        <div class="date text-right">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
+        </td>
+      </tr>
 {% endfor %}
-</section>
-<!-- facebook Like Box
-<section id="fb_section" class="content">
-<div class="fb-like-box" data-href="http://my-android-server.appspot.com/" data-width="292" data-show-faces="true" data-stream="true" data-header="true"></div>
-</section> -->
+        </tbody>
+      </table>
+    </div>
+    <div class="span1"></div>
+  </div>
+</div>
+
 {% endblock %}

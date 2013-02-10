@@ -1,17 +1,8 @@
 @charset "utf-8";
 /*
- * 文言
- */
-h2 {
-	font-size: 1.2em;
-	color: #004C9A;
-	text-decoration: underline;
-	margin: 10px;
-}
-/*
  * ステージ
  */
-div#kyouenView {
+#kyouenView {
 	background: #eee;
 	text-align: center;
 	border: 3px solid #000;
@@ -19,18 +10,11 @@ div#kyouenView {
 	margin: 5px auto;
 	padding: 5px;
 }
-div#kyouenView input#reset_button {
-	margin-top: 5px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	font-size: 1.2em;
-	font-weight: bold;
-}
 
 /*
  * ダイアログ
  */
-div#dialog {
+#dialog {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -40,13 +24,9 @@ div#dialog {
 	color: #333;
 	font-size: 2em;
 	height: 200px;
-	line-height: 100px;
-}
-label {
-	font-size: 70%;
 }
 
-div#notification {
+#notification {
 	position: fixed;
 	top: 15%;
 	right: 0;
@@ -57,6 +37,8 @@ div#notification {
 	border-bottom: 2px solid #333;
 	text-align: right;
 	padding-right: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-topleft: 5px;

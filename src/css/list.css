@@ -1,21 +1,5 @@
 @charset "utf-8";
 /*
- * ページャ
- */
-div.pager {
-	font-size: 1.2em;
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;
-	text-align: center;
-	margin-top: 2px;
-	margin-bottom: 2px;
-}
-
-div.pager>a:hover {
-	background-color: #aab;
-}
-
-/*
  * ステージ一覧
  */
 div#stages {
@@ -85,14 +69,6 @@ div#kyouenView div#creator0:before {
 	content: "created by ";
 }
 
-div#kyouenView input#kyouenButton {
-	margin-top: 5px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
 div#dialog {
 	position: fixed;
 	top: 50%;
@@ -106,7 +82,7 @@ div#dialog {
 	line-height: 100px;
 }
 
-div#notification {
+#notification {
 	position: fixed;
 	top: 15%;
 	right: 0;
@@ -117,10 +93,12 @@ div#notification {
 	border-bottom: 2px solid #333;
 	text-align: right;
 	padding-right: 5px;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
 }

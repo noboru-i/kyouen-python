@@ -281,6 +281,10 @@ class ListPage(webapp.RequestHandler):
         summary['count'] = KyouenPuzzleSummary.all().get().count or 0
         summary['index'] = index
         summary['open'] = openStage
+        summary['pager'] = [{
+                             'label': str((i*10)+1) + '〜' + str((i+1)*10),
+                             'function': 'javascript:loadStage('+str((i+1)*10)+')',
+                             } for i in range(summary['count'] /10)]
 
         template_values = {
                            'summary': summary,

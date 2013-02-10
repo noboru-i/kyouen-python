@@ -4,18 +4,13 @@
 	<link type="text/css" rel="stylesheet" href="/css/list.css" />
 {% endblock %}
 {% block script_include %}
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/list.js"></script>
 	<script src="/js/overlay.js"></script>
-	<script src="/js/pager.js"></script>
 {% endblock %}
 
 {% block title %}
 共円｜ステージ一覧
-{% endblock %}
-{% block head_title %}
-｜ステージ一覧
 {% endblock %}
 
 {% block script %}
@@ -75,36 +70,43 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+<!-- メインコンテンツ -->
+<div class="container">
 <div id="summary">
 	登録件数:{{ summary.count }}
 </div>
-<div class="pager clearfix"
-		data-size="{{ summary.count }}"
-		data-index="{{ summary.index }}">
-</div>
-<div id="stages">
-</div>
-<div class="pager clearfix"
-		data-size="{{ summary.count }}"
-		data-index="{{ summary.index }}">
+<div class="row">
+  <div class="span1">
+    <ul class="unstyled">
+      {% for i in summary.pager %}
+      <li><a href="{{ i.function }}">{{ i.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="span11">
+    <div id="stages">
+    </div>
+  </div>
 </div>
 
 <!-- オーバレイ -->
-<div id="kyouenView" style="position: initial; margin-top: 5px; margin-left: auto; margin-right: auto; display: none;">
+<div id="kyouenView" style="position: initial; margin-top: 60px; margin-left: auto; margin-right: auto; display: none;">
 	<div id="stageno0"></div>
 	<div id="creator0"></div>
 	<canvas id="canvas0"></canvas>
-	<input id="kyouenButton" type="button" value="共円！！" />
+	<a id="kyouenButton" class="btn btn-large btn-primary">共円！！</a>
 	<div id="dialog" style="display: none; width: 600px">
 		<div id="dialogMessage"></div>
 	</div>
+</div>
+
 </div>
 
 {% if not user %}
 	<!-- 通知領域 -->
 	<div id="notification">
 		ログインすることで<br>クリア履歴を保存出来ます<br>
-		<a href="/page/login"><img src="/image/sign-in-with-twitter_0.png" width="80%"></a>
+		<a href="/page/login" class="btn btn-primary btn-large">Sign in with twitter »</a>
 	</div>
 {% endif %}
 {% endblock %}

@@ -1,44 +1,55 @@
 {% extends 'layout.html' %}
 
 {% block css_include %}
-	<link type="text/css" rel="stylesheet" href="/css/application.css" />
 {% endblock %}
 
 {% block title %}
 共円｜アプリ紹介
 {% endblock %}
-{% block head_title %}
-｜アプリ紹介
-{% endblock %}
 
 {% block content %}
-<article class="application_info">
-	<h1><a
-		href="https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen"
-		target="_blank">詰め共円</a></h1>
-	<div>
-		<img src="/image/device-2011-07-30-235110.png" width="150px">
-		<img src="/image/device-2011-07-30-235153.png" width="150px">
-		<img src="/image/device-2011-07-30-235235.png" width="150px">
-	</div>
-	<div>
-		<img src="/image/tumekyouenQRcode.gif">
-	</div>
-</article>
-
-<hr>
-
-<article class="application_info">
-	<h1><a
-		href="https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker"
-		target="_blank">共円チェッカー</a></h1>
-	<div>
-		<img src="/image/device-2011-07-18-235954.png" width="150px">
-		<img src="/image/device-2011-07-18-235932.png" width="150px">
-		<img src="/image/device-2011-07-18-235836.png" width="150px">
-	</div>
-	<div>
-		<img src="/image/kyouen_QRcode.gif">
-	</div>
-</article>
+<div class="container">
+  <div class="hero-unit">
+    <h1>
+      <a href="https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen" target="_blank">
+        <img src="/image/icon.png" width="72px">
+        詰め共円
+      </a><img src="/image/tumekyouenQRcode.gif" width="50px">
+    </h1>
+    <hr>
+    <p>このページ同様、作成された詰め共円で遊べます。</p>
+    <p>
+      <img src="/image/device-2011-07-30-235110.png" width="150px">
+      <img src="/image/device-2011-07-30-235153.png" width="150px">
+      <img src="/image/device-2011-07-30-235235.png" width="150px">
+    </p>
+    <hr>
+    <p>
+      <a href="https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen" target="_blank">
+        <img src="/image/en_app_rgb_wo_60.png">
+      </a>
+    </p>
+  </div>
+  <div class="hero-unit">
+    <h1>
+      <a href="https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker" target="_blank">
+        <img src="/image/icon.png" width="72px">
+        共円チェッカー
+      </a><img src="/image/kyouen_QRcode.gif" width="50px">
+    </h1>
+    <hr>
+    <p>詰め共円の問題を作成出来ます。</p>
+    <p>
+      <img src="/image/device-2011-07-18-235954.png" width="150px">
+      <img src="/image/device-2011-07-18-235932.png" width="150px">
+      <img src="/image/device-2011-07-18-235836.png" width="150px">
+    </p>
+    <hr>
+    <p>
+      <a href="https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker" target="_blank">
+        <img src="/image/en_app_rgb_wo_60.png">
+      </a>
+    </p>
+  </div>
+</div>
 {% endblock %}

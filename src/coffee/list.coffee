@@ -186,7 +186,7 @@ class KyouenView
 openKyouen = (canvas) ->
   model = new KyouenModel(canvas)
   # 表示領域の高さ・幅のうち、最小のものの8割をcanvasのサイズとする
-  canvasSize = Math.floor(Math.min(document.body.clientWidth, document.body.clientHeight, document.documentElement.clientWidth, document.documentElement.clientHeight) * 0.8)
+  canvasSize = Math.floor((Math.min(document.body.clientWidth, document.body.clientHeight, document.documentElement.clientWidth, document.documentElement.clientHeight) - 100) * 0.8)
   canvasSize -= canvasSize % (model.size * 2) # 端数を調整
   $kyouenView = $("#kyouenView")
 
@@ -288,6 +288,7 @@ class TumeKyouenView extends KyouenView
 
     $button.unbind "click"
     $button.click (e) =>
+      return if not $button.isEnableButton()
       kyouenData = @model.isKyouenSelected()
       $button.disableButton()
       if kyouenData?
@@ -551,19 +552,13 @@ $.fn.extend
     view.drawKyouen()
     view
 
+  isEnableButton: (config) ->
+    return not @hasClass 'disabled'
+
   disableButton: (config) ->
-    if @button
-      # jQuery mobileの場合
-      @button "disable"
-      @button "refresh"
-    else
-      @attr disabled: "disabled"
+    @addClass 'disabled'
     this
 
   enableButton: (config) ->
-    if @button
-      # jQuery mobileの場合  
-      @button "enable"
-    else
-      @removeAttr "disabled"
+    @removeClass "disabled"
     this
