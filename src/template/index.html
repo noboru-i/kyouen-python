@@ -45,22 +45,25 @@
     <div class="span2"></div>
     <div class="span4">
       <h2>アクティビティ</h2>
-      <table class="table table-striped" style="width:100%">
-        <tbody>
-{% for a in activity %}
-      <tr>
-        <td>
-        <div class="act_content">
-          <img src="{{ a.user.image }}" width="25" height="25">
-          {{ a.user.screenName }}
-          が<a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
+{% for key, act in activity %}
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" href="#collapse{{ key.screenName }}{{ forloop.counter0 }}">
+            <img src="{{ key.image }}" width="25" height="25"> {{ key.screenName }} が {{ act|length }} ステージをクリアしました
+          </a>
         </div>
-        <div class="date text-right">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
-        </td>
-      </tr>
+        <div id="collapse{{ key.screenName }}{{ forloop.counter0 }}" class="accordion-body collapse">
+          <div class="accordion-inner">
+          {% for a in act %}
+          <div class="act_content">
+            <a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
+          </div>
+          <div class="date text-right">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
 {% endfor %}
-        </tbody>
-      </table>
     </div>
     <div class="span1"></div>
   </div>

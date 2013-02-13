@@ -373,7 +373,11 @@ class IndexPage(webapp.RequestHandler):
         template_values['recent'] = recent
         
         # アクティビティ
-        activity = StageUser.gql('ORDER BY clearDate DESC').fetch(limit=20)
+        def _groupby_user(stage_user):
+            return {'screenName':stage_user.user.screenName, 'image':stage_user.user.image}
+        import itertools
+        activity = [(name, list(stageusers))
+                    for name, stageusers in itertools.groupby(StageUser.gql('ORDER BY clearDate DESC').fetch(limit=100), _groupby_user)]
         template_values['activity'] = activity
         
         render_page(self, 'index.html', template_values)
