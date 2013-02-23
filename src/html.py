@@ -377,7 +377,7 @@ class IndexPage(webapp.RequestHandler):
             return {'screenName':stage_user.user.screenName, 'image':stage_user.user.image}
         import itertools
         activity = [(name, list(stageusers))
-                    for name, stageusers in itertools.groupby(StageUser.gql('ORDER BY clearDate DESC').fetch(limit=100), _groupby_user)]
+                    for name, stageusers in itertools.groupby(StageUser.gql('ORDER BY clearDate DESC').fetch(limit=200), _groupby_user)]
         template_values['activity'] = activity
         
         render_page(self, 'index.html', template_values)
