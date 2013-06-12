@@ -12,6 +12,10 @@ handlers:
   static_files: webapp.txt
   upload: webapp\.txt
 
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots\.txt
+
 - url: /js
   static_dir: js
 
