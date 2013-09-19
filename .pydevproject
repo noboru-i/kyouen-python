@@ -2,7 +2,7 @@
 <?eclipse-pydev version="1.0"?>
 
 <pydev_project>
-<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">python2.7</pydev_property>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">python</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.7</pydev_property>
 <pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
 <key>GOOGLE_APP_ENGINE</key>
@@ -21,6 +21,6 @@
 <path>${GOOGLE_APP_ENGINE}/lib/protorpc</path>
 <path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>
 <path>${GOOGLE_APP_ENGINE}/lib/yaml/lib</path>
-<path>/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/numpy</path>
+<path>/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy</path>
 </pydev_pathproperty>
 </pydev_project>

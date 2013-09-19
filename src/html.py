@@ -16,7 +16,7 @@ from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
 from app import templatefilters
 from const import Const
 
-SESSION_EXPIRE = 60 * 60 * 24 * 60 # 60日
+SESSION_EXPIRE = 60 * 60 * 24 * 20 # 60日
 
 USER_KEY_PREFIX = 'KEY'
 
