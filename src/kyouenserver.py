@@ -2,9 +2,9 @@
 #-*- coding: utf-8 -*-
 #
 import logging
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp.util import run_wsgi_app
-from django.utils import simplejson
+import webapp2
+import json
+from google.appengine.ext import db
 
 # 時計回りに90度回転させる。
 def rot(stage, size):
@@ -55,7 +55,7 @@ class RegistModel(db.Model):
                                      auto_now_add=True)
 
 # 登録処理
-class KyouenRegist(webapp.RequestHandler):
+class KyouenRegist(webapp2.RequestHandler):
 
     # 次のステージ番号を返します。
     def getNextStageNo(self):
@@ -159,7 +159,7 @@ class KyouenRegist(webapp.RequestHandler):
         return
 
 # 取得処理
-class KyouenGet(webapp.RequestHandler):
+class KyouenGet(webapp2.RequestHandler):
 
     def get(self, dataType=None):
         logging.debug('dataType=' + str(dataType))
@@ -191,17 +191,10 @@ class KyouenGet(webapp.RequestHandler):
             param = []
             [param.append(generateSendData(p)) for p in data]
             self.response.headers['Content-Type'] = 'application/json;charset=utf-8'
-            simplejson.dump(param, self.response.out, ensure_ascii=False)
+            self.response.write(json.dumps(param))
             pass
 
-application = webapp.WSGIApplication([('/kyouen/regist', KyouenRegist),
+application = webapp2.WSGIApplication([('/kyouen/regist', KyouenRegist),
                                       ('/kyouen/get\.(.*)', KyouenGet),
                                       ('/kyouen/get', KyouenGet),
                                       ], debug=True)
-
-def main():
-    logging.getLogger().setLevel(logging.DEBUG)
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()

@@ -22,5 +22,7 @@
 <path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>
 <path>${GOOGLE_APP_ENGINE}/lib/yaml/lib</path>
 <path>/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy</path>
+<path>${GOOGLE_APP_ENGINE}/lib/webapp2</path>
+<path>${GOOGLE_APP_ENGINE}/lib/jinja2</path>
 </pydev_pathproperty>
 </pydev_project>

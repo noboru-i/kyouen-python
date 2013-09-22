@@ -35,7 +35,7 @@
             <span>STAGE:{{ r.stageNo }}</span>
           </a>
           <div class="creator text-right">created by {{ r.creator }}</div>
-          <div class="date text-right">{{ r.registDate|jst|date:"Y/m/d H:i" }}</div>
+          <div class="date text-right">{{ r.registDate|jst("Y/m/d H:i") }}</div>
         </td>
       </tr>
 {% endfor %}
@@ -48,17 +48,17 @@
 {% for key, act in activity %}
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" href="#collapse{{ key.screenName }}{{ forloop.counter0 }}">
+          <a class="accordion-toggle" data-toggle="collapse" href="#collapse{{ key.screenName }}{{ loop.index0 }}">
             <img src="{{ key.image }}" width="25" height="25"> {{ key.screenName }} が {{ act|length }} ステージをクリアしました
           </a>
         </div>
-        <div id="collapse{{ key.screenName }}{{ forloop.counter0 }}" class="accordion-body collapse">
+        <div id="collapse{{ key.screenName }}{{ loop.index0 }}" class="accordion-body collapse">
           <div class="accordion-inner">
           {% for a in act %}
           <div class="act_content">
             <a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
           </div>
-          <div class="date text-right">{{ a.clearDate|jst|date:"Y/m/d H:i" }}</div>
+          <div class="date text-right">{{ a.clearDate|jst("Y/m/d H:i") }}</div>
           {% endfor %}
           </div>
         </div>

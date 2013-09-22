@@ -2,7 +2,7 @@ application: my-android-server
 version: 2-0
 runtime: python27
 api_version: 1
-threadsafe: false
+threadsafe: true
 
 builtins:
 - remote_api: on
@@ -30,22 +30,24 @@ handlers:
   upload: image/favicon\.ico
 
 - url: /tasks/.*
-  script: tasks.py
+  script: tasks.application
 
 - url: /kyouen/.*
-  script: kyouenserver.py
+  script: kyouenserver.application
 
 - url: /page/.*
-  script: html.py
+  script: html.application
 
 - url: /gcm/.*
-  script: gcmserver.py
+  script: gcmserver.application
 
 - url: /
-  script: html.py
+  script: html.application
 
 libraries:
-- name: django
-  version: "1.3"
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
 - name: numpy
   version: "1.6.1"

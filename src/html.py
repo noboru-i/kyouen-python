@@ -6,22 +6,26 @@ import Cookie
 import tweepy
 import uuid
 import datetime
-from django.utils import simplejson
-from google.appengine.ext import webapp, db
+import jinja2
+import webapp2
+import json
+from google.appengine.ext import db
 from google.appengine.api import memcache
-from google.appengine.ext.webapp import template
-from google.appengine.ext.webapp.util import run_wsgi_app
 
 from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
-from app import templatefilters
 from const import Const
 
 SESSION_EXPIRE = 60 * 60 * 24 * 20 # 60日
 
 USER_KEY_PREFIX = 'KEY'
 
-# カスタムタグの登録
-webapp.template.register_template_library('app.templatefilters')
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'template')),
+    extensions=['jinja2.ext.autoescape'])
+
+from app import templatefilters
+JINJA_ENVIRONMENT.filters['jst'] = templatefilters.jst
+JINJA_ENVIRONMENT.filters['list_link'] = templatefilters.list_link
 
 class RequestToken(db.Model):
     token_key = db.StringProperty(required=True)
@@ -110,10 +114,8 @@ def render_page(handler, page, values=None):
     if not template_values.has_key('user'):
         template_values['user'] = get_user(cookie)
 
-    folder = 'template'
-    path = os.path.join(os.path.dirname(__file__), folder, page)
-    html = template.render(path, template_values)
-    handler.response.out.write(html)
+    template = JINJA_ENVIRONMENT.get_template(page)
+    handler.response.out.write(template.render(template_values))
 
 def is_mobile(handler):
     user_agent = handler.request.user_agent
@@ -130,7 +132,7 @@ def is_mobile(handler):
     return False
 
 # ログイン処理
-class OauthLogin(webapp.RequestHandler):
+class OauthLogin(webapp2.RequestHandler):
     def get(self):
         auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
         auth_url = auth.get_authorization_url()
@@ -139,7 +141,7 @@ class OauthLogin(webapp.RequestHandler):
         self.redirect(auth_url)
 
 # ログアウト処理
-class OauthLogout(webapp.RequestHandler):
+class OauthLogout(webapp2.RequestHandler):
     def get(self):
         cookie = get_cookie()
         if cookie.has_key('sid'):
@@ -148,7 +150,7 @@ class OauthLogout(webapp.RequestHandler):
         self.redirect('/')
 
 # ログインコールバック処理
-class OauthLoginCallBack(webapp.RequestHandler):
+class OauthLoginCallBack(webapp2.RequestHandler):
     def get(self):
         request_token_key = self.request.get("oauth_token")
         request_verifier = self.request.get('oauth_verifier')
@@ -177,14 +179,14 @@ class OauthLoginCallBack(webapp.RequestHandler):
         self.redirect('/')
 
 # APIでのログイン処理
-class ApiLogin(webapp.RequestHandler):
+class ApiLogin(webapp2.RequestHandler):
     def post(self):
         request_token = self.request.get("token")
         request_token_secret = self.request.get('token_secret')
         if not request_token:
             self.response.content_type = 'application/json'
             responseJson = {'message': 'invalid parameter'}
-            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            self.response.write(json.dumps(responseJson))
             return
 
         # memcacheへ認証情報を設定
@@ -207,7 +209,7 @@ class ApiLogin(webapp.RequestHandler):
         responseJson = {'message': 'success',
                         'user': {'id': user.userId,
                                  'image': user.image}}
-        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        self.response.write(json.dumps(responseJson))
         return
 
 # クリア情報の追加
@@ -217,16 +219,16 @@ class ApiLogin(webapp.RequestHandler):
 #     "clearDate": "2012-01-01 00:00:00"
 #   }
 # ]
-class AddAllStageUser(webapp.RequestHandler):
+class AddAllStageUser(webapp2.RequestHandler):
     def post(self):
-        data = simplejson.loads(self.request.get('data'))
+        data = json.loads(self.request.get('data'))
 
         # ユーザ情報を取得
         cookie = get_cookie()
         user = get_user(cookie)
         if not user:
             responseJson = {'message' : 'not authentication'}
-            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            self.response.write(json.dumps(responseJson))
             return
         # 送信されたステージ情報を登録
         clearStageNoList = [];
@@ -265,11 +267,11 @@ class AddAllStageUser(webapp.RequestHandler):
                                       'clearDate' : stageUser.clearDate.strftime('%Y-%m-%d %H:%M:%S')})
         responseJson = {'message' : 'success',
                         'data' : syncStageList}
-        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        self.response.write(json.dumps(responseJson))
         return
 
 # リスト表示
-class ListPage(webapp.RequestHandler):
+class ListPage(webapp2.RequestHandler):
     def get(self):
         index = strToInt(self.request.get('index'))
         openStage = strToInt(self.request.get('open'))
@@ -282,7 +284,7 @@ class ListPage(webapp.RequestHandler):
         summary['index'] = index
         summary['open'] = openStage
         summary['pager'] = [{
-                             'label': str((i*10)+1) + '〜' + str((i+1)*10),
+                             'label': str((i*10)+1) + u'〜' + str((i+1)*10),
                              'function': 'javascript:loadStage('+str((i+1)*10)+')',
                              } for i in range(summary['count'] /10)]
 
@@ -297,7 +299,7 @@ class ListPage(webapp.RequestHandler):
     def post(self):
         self.get(self)
 
-class ListStages(webapp.RequestHandler):
+class ListStages(webapp2.RequestHandler):
     def post(self):
         index = strToInt(self.request.get('index'))
         
@@ -313,16 +315,16 @@ class ListStages(webapp.RequestHandler):
                 if clear:
                     p.clear = '1'
 
-        json = simplejson.dumps([dict(stageNo=p.stageNo,
+        response_json = json.dumps([dict(stageNo=p.stageNo,
                                       size=p.size,
                                       stage=p.stage,
                                       creator=p.creator,
-                                      registDate=templatefilters.jst(p.registDate).strftime('%Y/%m/%d %H:%M:%S'),
+                                      registDate=templatefilters.jst(p.registDate, '%Y/%m/%d %H:%M:%S'),
                                       clear=p.clear if hasattr(p, 'clear') else '0',
                                       ) for p in puzzles])
-        self.response.out.write(json)
+        self.response.out.write(response_json)
 
-class AddStageUser(webapp.RequestHandler):
+class AddStageUser(webapp2.RequestHandler):
     def post(self):
         stageNo = strToInt(self.request.get("stageNo"))
         logging.info('stageNo=' + str(stageNo))
@@ -351,18 +353,18 @@ class AddStageUser(webapp.RequestHandler):
             user.put()
         stage_user.put()
 
-class ListRanking(webapp.RequestHandler):
+class ListRanking(webapp2.RequestHandler):
     def post(self):
         users = User.all().order('-clearStageCount')
-        
-        json = simplejson.dumps([dict(screenName=u.screenName,
+
+        response_json = json.dumps([dict(screenName=u.screenName,
                                       image=u.image,
                                       clearStageCount=u.clearStageCount,
                                       ) for u in users])
-        self.response.out.write(json)
+        self.response.out.write(response_json)
 
 # インデックスページ表示
-class IndexPage(webapp.RequestHandler):
+class IndexPage(webapp2.RequestHandler):
     def get(self):
         template_values = {}
         
@@ -385,7 +387,7 @@ class IndexPage(webapp.RequestHandler):
     def post(self):
         self.get(self)
 
-class StaticPage(webapp.RequestHandler):
+class StaticPage(webapp2.RequestHandler):
     def get(self, value=None):
         if not value:
             value = 'index.html'
@@ -395,7 +397,7 @@ class StaticPage(webapp.RequestHandler):
     def post(self):
         self.get(self)
 
-application = webapp.WSGIApplication([('/', IndexPage),
+application = webapp2.WSGIApplication([('/', IndexPage),
                                       ('/index.html', IndexPage),
                                       ('/page/list.html', ListPage),
                                       ('/page/list', ListStages),
@@ -408,9 +410,3 @@ application = webapp.WSGIApplication([('/', IndexPage),
                                       ('/page/add_all', AddAllStageUser),
                                       ('/page/(.*)', StaticPage),
                                       ], debug=True)
-
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()

@@ -3,8 +3,8 @@
 #
 import logging
 import tweepy
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp.util import run_wsgi_app
+import webapp2
+from google.appengine.ext import db
 
 from kyouenserver import RegistModel
 from const import Const
@@ -47,7 +47,7 @@ def sendGcmAll():
     return True
 
 
-class TweetTask(webapp.RequestHandler):
+class TweetTask(webapp2.RequestHandler):
     def get(self):
         max_disp = 5
 
@@ -89,11 +89,5 @@ class TweetTask(webapp.RequestHandler):
         sendGcmAll()
         return
 
-application = webapp.WSGIApplication([('/tasks/tweet', TweetTask),
+application = webapp2.WSGIApplication([('/tasks/tweet', TweetTask),
                                       ], debug=True)
-
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()

@@ -2,9 +2,9 @@
 #-*- coding: utf-8 -*-
 #
 import logging
-from google.appengine.ext import webapp, db
-from google.appengine.ext.webapp.util import run_wsgi_app
-from django.utils import simplejson
+import webapp2
+import json
+from google.appengine.ext import db
 
 from const import Const
 
@@ -16,7 +16,7 @@ class GcmModel(db.Model):
     registDate = db.DateTimeProperty(auto_now_add=True)
 
 # 登録処理
-class GcmRegist(webapp.RequestHandler):
+class GcmRegist(webapp2.RequestHandler):
 
     # GETリクエストを処理します。
     def get(self):
@@ -42,7 +42,7 @@ class GcmRegist(webapp.RequestHandler):
             # レスポンスの返却
             self.response.content_type = 'application/json'
             responseJson = {'message': 'already registed'}
-            simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+            self.response.write(json.dumps(responseJson))
             return
         
         # 入力データの登録
@@ -52,10 +52,10 @@ class GcmRegist(webapp.RequestHandler):
         # レスポンスの返却
         self.response.content_type = 'application/json'
         responseJson = {'message': 'success'}
-        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        self.response.write(json.dumps(responseJson))
         return
 
-class GcmUnregist(webapp.RequestHandler):
+class GcmUnregist(webapp2.RequestHandler):
     # GETリクエストを処理します。
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
@@ -85,10 +85,10 @@ class GcmUnregist(webapp.RequestHandler):
         # レスポンスの返却
         self.response.content_type = 'application/json'
         responseJson = {'message': 'success'}
-        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        self.response.write(json.dumps(responseJson))
         return
 
-class GcmSendMessage(webapp.RequestHandler):
+class GcmSendMessage(webapp2.RequestHandler):
     def sendGcm(self, gcmModel):
         from google.appengine.api import urlfetch
         import urllib
@@ -118,17 +118,10 @@ class GcmSendMessage(webapp.RequestHandler):
         # レスポンスの返却
         self.response.content_type = 'application/json'
         responseJson = {'message': 'success'}
-        simplejson.dump(responseJson, self.response.out, ensure_ascii=False)
+        self.response.write(json.dumps(responseJson))
         return
 
-application = webapp.WSGIApplication([('/gcm/regist', GcmRegist),
+application = webapp2.WSGIApplication([('/gcm/regist', GcmRegist),
                                       ('/gcm/unregist', GcmUnregist),
                                       ('/gcm/send', GcmSendMessage)
                                       ], debug=True)
-
-def main():
-    logging.getLogger().setLevel(logging.DEBUG)
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()
