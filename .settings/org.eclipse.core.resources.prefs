@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/apnsserver.py=utf-8
 encoding//src/app/templatefilters.py=utf-8
 encoding//src/const.py=utf-8
 encoding//src/gcmserver.py=utf-8

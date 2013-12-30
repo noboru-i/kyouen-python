@@ -3,7 +3,7 @@
 import dateutil.tz
 
 # UTC→JST変換
-def jst (value, date_format='Y/m/d H:i'):
+def jst (value, date_format='%Y/%m/%d %H:%M'):
     return value.replace(tzinfo=dateutil.tz.tzutc()).astimezone(dateutil.tz.gettz('Asia/Tokyo')).strftime(date_format)
 
 # ステージ一覧へのリンク作成

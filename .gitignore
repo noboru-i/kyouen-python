@@ -1,2 +1,5 @@
 /src/const.py
 *.pyc
+/db
+/src/certificate
+

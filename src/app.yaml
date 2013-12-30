@@ -41,6 +41,9 @@ handlers:
 - url: /gcm/.*
   script: gcmserver.application
 
+- url: /apns/.*
+  script: apnsserver.application
+
 - url: /
   script: html.application
 
@@ -51,3 +54,5 @@ libraries:
   version: latest
 - name: numpy
   version: "1.6.1"
+- name: ssl
+  version: latest

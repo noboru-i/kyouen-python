@@ -9,6 +9,10 @@ from google.appengine.ext import db
 from kyouenserver import RegistModel
 from const import Const
 from gcmserver import GcmModel
+from apnsserver import ApnsModel
+
+# https://github.com/djacobs/PyAPNs/blob/master/apns.py
+from libs.pyapns.apns import APNs, Payload
 
 # twitterに投稿
 def post_twitter(message):
@@ -17,7 +21,6 @@ def post_twitter(message):
     api = tweepy.API(auth_handler=auth)
     api.update_status(message)
     return
-
 
 def sendGcm(gcmModel):
     from google.appengine.api import urlfetch
@@ -46,6 +49,25 @@ def sendGcmAll():
 
     return True
 
+def sendApns(self, apnsModel):
+    #apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
+    apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
+    token_hex = apnsModel.deviceToken
+
+    alert = 'ステージが追加されました' # TODO 外部リソース化？
+    badge = self.request.params.get('badge')
+    payload = Payload(alert=alert, badge=badge)
+
+    apns.gateway_server.send_notification(token_hex, payload)
+    self.response.write(u"Sent a notification message.")
+
+    logging.debug('regId=' + token_hex)
+
+def sendApnsAll():
+    query = ApnsModel.all()
+    for m in query:
+        sendApns(m)
+    return True
 
 class TweetTask(webapp2.RequestHandler):
     def get(self):
@@ -84,9 +106,11 @@ class TweetTask(webapp2.RequestHandler):
                 db.delete(m)
         except:
             pass
-        
+
         # GCMで送信
         sendGcmAll()
+        # APNSで送信
+        sendApnsAll()
         return
 
 application = webapp2.WSGIApplication([('/tasks/tweet', TweetTask),

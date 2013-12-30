@@ -35,7 +35,7 @@
             <span>STAGE:{{ r.stageNo }}</span>
           </a>
           <div class="creator text-right">created by {{ r.creator }}</div>
-          <div class="date text-right">{{ r.registDate|jst("Y/m/d H:i") }}</div>
+          <div class="date text-right">{{ r.registDate|jst }}</div>
         </td>
       </tr>
 {% endfor %}
@@ -58,7 +58,7 @@
           <div class="act_content">
             <a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました
           </div>
-          <div class="date text-right">{{ a.clearDate|jst("Y/m/d H:i") }}</div>
+          <div class="date text-right">{{ a.clearDate|jst }}</div>
           {% endfor %}
           </div>
         </div>
