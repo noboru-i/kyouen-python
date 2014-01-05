@@ -89,15 +89,16 @@ class ApnsUnregist(webapp2.RequestHandler):
 # TODO テスト用
 class ApnsTestMessage(webapp2.RequestHandler):
     def get(self):
-        from libs.pyapns.apns import APNs, Payload
+        from libs.pyapns.apns import APNs, Payload, PayloadAlert
         query = ApnsModel.all()
         apnsModel = query.fetch(1, 0)
         #apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
         apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
         token_hex = apnsModel[0].deviceToken
 
-        alert = self.request.params.get('alert')
-        badge = self.request.params.get('badge')
+        loc_key = 'notification_new_stage'
+        badge = 1
+        alert = PayloadAlert(None, loc_key=loc_key)
         payload = Payload(alert=alert, badge=badge)
 
         apns.gateway_server.send_notification(token_hex, payload)
@@ -106,5 +107,5 @@ class ApnsTestMessage(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([('/apns/regist', ApnsRegist),
                                       ('/apns/unregist', ApnsUnregist),
-#                                      ('/apns/test_message', ApnsTestMessage), # TODO テスト
+                                      ('/apns/test_message', ApnsTestMessage), # TODO テスト
                                       ], debug=True)

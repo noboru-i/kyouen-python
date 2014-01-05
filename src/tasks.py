@@ -12,7 +12,7 @@ from gcmserver import GcmModel
 from apnsserver import ApnsModel
 
 # https://github.com/djacobs/PyAPNs/blob/master/apns.py
-from libs.pyapns.apns import APNs, Payload
+from libs.pyapns.apns import APNs, Payload, PayloadAlert
 
 # twitterに投稿
 def post_twitter(message):
@@ -54,8 +54,9 @@ def sendApns(self, apnsModel):
     apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
     token_hex = apnsModel.deviceToken
 
-    alert = 'ステージが追加されました' # TODO 外部リソース化？
-    badge = self.request.params.get('badge')
+    loc_key = 'notification_new_stage'
+    badge = 1
+    alert = PayloadAlert(None, loc_key=loc_key)
     payload = Payload(alert=alert, badge=badge)
 
     apns.gateway_server.send_notification(token_hex, payload)
