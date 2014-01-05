@@ -24,10 +24,14 @@ function loadCleared(stageNo, open) {
 			$ranking.append($table);
 			$table.append($('<thead><tr><th class="order">順位</th><th colspan="2" class="name">名前</th><th class="count">クリア数</th></tr></thead>'));
 			var $tbody = $('<tbody />').appendTo($table);
+			var rank = 0;
 			for (var i = 0; i < result.length; i++) {
+				if (result[i].screenName === 'Guest') {
+					continue;
+				}
 				var $tr = $('<tr />');
 				$tbody.append($tr);
-				var $order = $('<td />').addClass('order').text((i + 1) + '位');
+				var $order = $('<td />').addClass('order').text((rank + 1) + '位');
 				$tr.append($order);
 				var $image = $('<td />').addClass('image').attr('width', '50px').append($('<img />').attr({
 					src: result[i].image,
@@ -35,10 +39,14 @@ function loadCleared(stageNo, open) {
 					height: '48px',
 				}));
 				$tr.append($image);
-				var $name = $('<td />').addClass('name').text(result[i].screenName);
+				var $link = $('<a />').text(result[i].screenName).attr({
+					href: 'https://twitter.com/' + result[i].screenName,
+					target: '_blank'})
+				var $name = $('<td />').addClass('name').append($link);
 				$tr.append($name);
 				var $count = $('<td />').addClass('count').text(result[i].clearStageCount);
 				$tr.append($count);
+				rank += 1;
 			}
 		},
 	});
