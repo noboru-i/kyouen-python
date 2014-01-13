@@ -49,9 +49,9 @@ def sendGcmAll():
 
     return True
 
-def sendApns(self, apnsModel):
-    #apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
-    apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
+def sendApns(apnsModel):
+    apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
+    #apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
     token_hex = apnsModel.deviceToken
 
     loc_key = 'notification_new_stage'
@@ -60,9 +60,7 @@ def sendApns(self, apnsModel):
     payload = Payload(alert=alert, badge=badge)
 
     apns.gateway_server.send_notification(token_hex, payload)
-    self.response.write(u"Sent a notification message.")
-
-    logging.debug('regId=' + token_hex)
+    logging.debug('deviceToken=' + apnsModel.deviceToken)
 
 def sendApnsAll():
     query = ApnsModel.all()

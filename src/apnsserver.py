@@ -92,8 +92,8 @@ class ApnsTestMessage(webapp2.RequestHandler):
         from libs.pyapns.apns import APNs, Payload, PayloadAlert
         query = ApnsModel.all()
         apnsModel = query.fetch(1, 0)
-        #apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
-        apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
+        apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
+        #apns = APNs(use_sandbox=True, cert_file='certificate/aps_development.pem') # サンドボックス
         token_hex = apnsModel[0].deviceToken
 
         loc_key = 'notification_new_stage'
