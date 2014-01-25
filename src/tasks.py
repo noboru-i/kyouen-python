@@ -104,7 +104,7 @@ class TweetTask(webapp2.RequestHandler):
             for m in query:
                 db.delete(m)
         except:
-            pass
+            return
 
         # GCMで送信
         sendGcmAll()
