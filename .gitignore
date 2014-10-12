@@ -2,4 +2,5 @@
 *.pyc
 /db
 /src/certificate
-
+/src/node_modules
+/src/js/maps/
