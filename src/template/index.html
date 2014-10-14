@@ -13,7 +13,7 @@
 {% block content %}
 <!-- メインコンテンツ -->
 <div class="container">
-  <div class="hero-unit">
+  <div class="jumbotron">
     <h1>共円</h1>
     <p>共円とは、４つの石を通る円のことです。<br>
     このページでは、盤上に置かれた石から共円を指摘する、「詰め共円」が多数登録されています。<br>
@@ -23,8 +23,7 @@
     </p>
   </div>
   <div class="row">
-    <div class="span1"></div>
-    <div class="span4">
+    <div class="col-md-6">
       <h2>最新の登録</h2>
       <table class="table table-striped" style="width:100%">
         <tbody>
@@ -42,18 +41,17 @@
         </tbody>
       </table>
     </div>
-    <div class="span2"></div>
-    <div class="span4">
+    <div class="col-md-6">
       <h2>アクティビティ</h2>
 {% for key, act in activity %}
-      <div class="accordion-group">
-        <div class="accordion-heading">
+      <div class="panel panel-default">
+        <div class="panel-heading">
           <a class="accordion-toggle" data-toggle="collapse" href="#collapse{{ key.screenName }}{{ loop.index0 }}">
             <img src="{{ key.image }}" width="25" height="25"> {{ key.screenName }} が {{ act|length }} ステージをクリアしました
           </a>
         </div>
-        <div id="collapse{{ key.screenName }}{{ loop.index0 }}" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="collapse{{ key.screenName }}{{ loop.index0 }}" class="panel-collapse collapse">
+          <div class="panel-body">
           {% for a in act %}
           <div class="act_content">
             <a href="{{ a.stage.stageNo|list_link }}">STAGE:{{ a.stage.stageNo }}</a>をクリアしました

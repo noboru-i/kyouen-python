@@ -76,17 +76,18 @@ $(function() {
 	登録件数:{{ summary.count }}
 </div>
 <div class="row">
-  <div class="span1">
-    <ul class="unstyled">
+  <div class="col-md-2">
+    <ul class="list-unstyled">
       {% for i in summary.pager %}
       <li><a href="{{ i.function }}">{{ i.label }}</a></li>
       {% endfor %}
     </ul>
   </div>
-  <div class="span11">
+  <div class="col-md-8">
     <div id="stages">
     </div>
   </div>
+  <div class="col-md-2"></div>
 </div>
 
 <!-- オーバレイ -->
