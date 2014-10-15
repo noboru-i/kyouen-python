@@ -3,4 +3,6 @@
 /db
 /src/certificate
 /src/node_modules
-/src/js/maps/
+/src/js/
+/src/css/
+/src/html/
