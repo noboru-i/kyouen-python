@@ -6,6 +6,7 @@ jade = require 'gulp-jade'
 stylus = require 'gulp-stylus'
 del = require 'del'
 concat = require 'gulp-concat'
+order = require 'gulp-order'
 
 # clean
 gulp.task 'clean', ->
@@ -28,9 +29,13 @@ gulp.task 'jade', ->
 
 # coffee
 gulp.task 'coffee', ->
-  gulp.src './coffee/*.coffee'
+  gulp.src ['coffee/app.coffee', './coffee/*.coffee']
     .pipe sourcemaps.init()
-    .pipe coffee({bare: false}).on('error', gutil.log)
+    .pipe coffee({bare: true}).on('error', gutil.log)
+    .pipe order([
+      "coffee/app.js",
+      "coffee/*.js"
+    ])
     .pipe concat('app.js')
     .pipe sourcemaps.write('./maps')
     .pipe gulp.dest('./js/')
