@@ -1,11 +1,11 @@
-#‹¤‰~ for Google App Engine(python)
+# å…±å†† for Google App Engine(python)
 
-##‰Ò“­’†‚ÌŠÂ‹«
+## ç¨¼åƒä¸­ã®ç’°å¢ƒ
 http://my-android-server.appspot.com/
 
-##AndroidƒAƒvƒŠ
-###‹l‚ß‹¤‰~
+## Androidã‚¢ãƒ—ãƒª
+### è©°ã‚å…±å††
 https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen
 
-###‹¤‰~ƒ`ƒFƒbƒJ[
+### å…±å††ãƒã‚§ãƒƒã‚«ãƒ¼
 https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker
