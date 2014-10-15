@@ -31,6 +31,7 @@ gulp.task 'coffee', ->
   gulp.src './coffee/*.coffee'
     .pipe sourcemaps.init()
     .pipe coffee({bare: false}).on('error', gutil.log)
+    .pipe concat('app.js')
     .pipe sourcemaps.write('./maps')
     .pipe gulp.dest('./js/')
   return
