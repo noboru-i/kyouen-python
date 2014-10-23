@@ -1,0 +1,11 @@
+table.table.table-striped(style="width:100%" ng-controller="RecentStagesController" ng-init="init()")
+  tbody
+    tr(ng-repeat="recent in recents")
+      td
+        a(href="1")
+          span STAGE:
+          span(ng-bind="recent.stageNo")
+        .creator.text-right created by
+          .text(ng-bind="recent.creator")
+        .date.text-right(ng-bind="recent.registDate")
+

@@ -22,7 +22,7 @@ gulp.task 'stylus', ->
 
 # jade
 gulp.task 'jade', ->
-  gulp.src "./jade/*.jade"
+  gulp.src "./jade/**/*.jade"
     .pipe jade()
     .pipe gulp.dest("./html/")
   return
@@ -31,7 +31,7 @@ gulp.task 'jade', ->
 gulp.task 'coffee', ->
   gulp.src ['coffee/app.coffee', './coffee/*.coffee']
     .pipe sourcemaps.init()
-    .pipe coffee({bare: true}).on('error', gutil.log)
+    .pipe coffee().on('error', gutil.log)
     .pipe order([
       "coffee/app.js",
       "coffee/*.js"
@@ -44,7 +44,7 @@ gulp.task 'coffee', ->
 # watch
 gulp.task 'watch', ->
   gulp.watch './stylus/*.styl', ['stylus']
-  gulp.watch './jade/*.jade', ['jade']
+  gulp.watch './jade/**/*.jade', ['jade']
   gulp.watch './coffee/*.coffee', ['coffee']
 
 gulp.task 'default', ['stylus', 'jade', 'coffee']
