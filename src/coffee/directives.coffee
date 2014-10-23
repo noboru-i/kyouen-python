@@ -2,7 +2,8 @@
 
 RecentStagesController = ($scope, recentService) ->
   $scope.init = ->
-    $scope.recents = recentService.fetch()
+    recentService.fetch().then (data) ->
+      $scope.recents = data
 
 @KyouenApp
 .directive 'recentStages', ()->
