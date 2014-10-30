@@ -1,0 +1,9 @@
+accordion(close-others="false")
+  accordion-group(ng-repeat="activity in activities")
+    accordion-heading
+      img(src="{{activity.user.image}}" width="25" height="25")
+      | &nbsp;{{activity.user.screenName}} が {{activity.list.length}} ステージをクリアしました
+    div(ng-repeat="stageuser in activity.list")
+      a(href="{{stageuser.stageNo}}") STAGE: {{stageuser.stageNo}}
+      | をクリアしました
+      .text-right {{stageuser.clearDate|jst}}

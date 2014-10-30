@@ -1,11 +1,11 @@
 table.table.table-striped(style="width:100%")
   tbody
-    tr(ng-repeat="recent in recents")
+    tr(ng-repeat="recentStage in recentStages")
       td
-        a(ng-href="{{recent.stageNo|listLink}}")
+        a(ng-href="{{recentStage.stageNo|listLink}}")
           span STAGE:
-          span(ng-bind="recent.stageNo")
+          span(ng-bind="recentStage.stageNo")
         .creator.text-right created by&nbsp;
-          span(ng-bind="recent.creator")
-        .date.text-right(ng-bind="recent.registDate|jst")
+          span(ng-bind="recentStage.creator")
+        .date.text-right(ng-bind="recentStage.registDate|jst")
 

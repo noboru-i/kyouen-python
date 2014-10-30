@@ -8,10 +8,28 @@ u"""APIレスポンスを返却するクラスを定義する.
 import logging
 import webapp2
 import json
+import datetime
 from google.appengine.ext import db
 
 from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
+from html import StageUser
 from const import Const
+
+
+SIMPLE_TYPES = (int, long, float, bool, dict, basestring, list)
+
+
+def to_dict(model):
+    output = {}
+
+    if hasattr(model, '__iter__'):
+        return [to_dict(item) for item in model]
+
+    for key, prop in model.properties().iteritems():
+        value = getattr(model, key)
+        output[key] = str(value)
+
+    return output
 
 
 class RecentStages(webapp2.RequestHandler):
@@ -25,12 +43,36 @@ class RecentStages(webapp2.RequestHandler):
         u""" 最近の投稿を返却する. """
         # 最近の登録
         recent = KyouenPuzzle.gql('ORDER BY stageNo DESC').fetch(limit=10)
-        result = []
-        for entry in recent:
-            result.append(dict(
-                [(p, unicode(getattr(entry, p))) for p in entry.properties()]))
-        self.response.out.write(json.dumps(result))
+        self.response.out.write(json.dumps(to_dict(recent)))
+
+
+class Activities(webapp2.RequestHandler):
+
+    u"""アクティビティを返却する.
+
+    10件固定
+    """
+
+    def get(self):
+        u"""アクティビティを返却する."""
+        def _groupby_user(stage_user):
+            return {'screenName': stage_user.user.screenName,
+                    'image': stage_user.user.image}
+
+        def _stageuser_to_dict(obj):
+            return [{'clearDate': str(o.clearDate),
+                     'stageNo': o.stage.stageNo}
+                    for o in obj]
+        stageUsers = StageUser.gql('ORDER BY clearDate DESC').fetch(limit=50)
+        from itertools import groupby
+        activities = [{'user': user,
+                       'list': _stageuser_to_dict(stageusers)}
+                      for user, stageusers
+                      in groupby(stageUsers, _groupby_user)]
+        self.response.out.write(json.dumps(activities))
+
 
 application = webapp2.WSGIApplication([
-    ('/api/recent', RecentStages),
+    ('/api/recent_stages', RecentStages),
+    ('/api/activities', Activities),
 ], debug=True)
