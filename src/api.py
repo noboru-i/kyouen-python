@@ -20,6 +20,7 @@ SIMPLE_TYPES = (int, long, float, bool, dict, basestring, list)
 
 
 def to_dict(model):
+    u"""modelをdictionaryに変換する."""
     output = {}
 
     if hasattr(model, '__iter__'):

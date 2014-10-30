@@ -4,6 +4,6 @@ accordion(close-others="false")
       img(src="{{activity.user.image}}" width="25" height="25")
       | &nbsp;{{activity.user.screenName}} が {{activity.list.length}} ステージをクリアしました
     div(ng-repeat="stageuser in activity.list")
-      a(href="{{stageuser.stageNo}}") STAGE: {{stageuser.stageNo}}
+      a(href="{{stageuser.stageNo|listLink}}") STAGE: {{stageuser.stageNo}}
       | をクリアしました
       .text-right {{stageuser.clearDate|jst}}
