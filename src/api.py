@@ -28,7 +28,7 @@ def to_dict(model):
 
     for key, prop in model.properties().iteritems():
         value = getattr(model, key)
-        output[key] = str(value)
+        output[key] = unicode(value)
 
     return output
 
