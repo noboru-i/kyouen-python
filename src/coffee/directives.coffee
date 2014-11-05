@@ -10,6 +10,11 @@ ActivitiesController = ($scope, activityService) ->
     activityService.fetch().then (data) ->
       $scope.activities = data;
 
+LoginController = ($scope, loginService) ->
+  $scope.init = ->
+    loginService.fetch().then (data) ->
+      $scope.currentUser = data;
+
 @KyouenApp
 .directive 'recentStages', ()->
   restrict: 'E'
@@ -24,5 +29,13 @@ ActivitiesController = ($scope, activityService) ->
   replace: false
   templateUrl: 'html/parts/activities.html'
   controller: ['$scope', 'activityService', ActivitiesController]
+  link: (scope, element, attrs, ctrl) ->
+    scope.init()
+
+.directive 'loginHeader', () ->
+  restrict: 'E'
+  replace: true
+  templateUrl: 'html/parts/login_header.html'
+  controller: ['$scope', 'loginService', LoginController]
   link: (scope, element, attrs, ctrl) ->
     scope.init()

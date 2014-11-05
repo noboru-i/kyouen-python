@@ -1,0 +1,8 @@
+div
+  .navbar-text.pull-right(ng-if="currentUser.loggedin")
+    img(ng-src="{{ currentUser.image }}" width="25" height="25")
+    | {{ currentUser.screenName }}&nbsp;|&nbsp;
+    a(href="/page/logout") ログアウト
+
+  .navbar-form.pull-right(ng-if="!currentUser.loggedin")
+    a.btn.btn-primary(href="/page/login") Sign in with twitter »

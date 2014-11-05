@@ -33,6 +33,34 @@ def to_dict(model):
     return output
 
 
+class Login(webapp2.RequestHandler):
+    u"""ログイン状態を取得する。
+
+    """
+
+    def get(self):
+        u"""ログイン状態を取得する."""
+
+        # ユーザ情報を取得
+        from html import get_cookie
+        from html import get_user
+        cookie = get_cookie()
+        user = get_user(cookie)
+        if not user:
+            import uuid
+            self.response.set_cookie('sid', str(uuid.uuid4()))
+            responseJson = {'loggedin': False}
+            self.response.write(json.dumps(responseJson))
+            return
+        responseJson = {
+            'userId': user.userId,
+            'screenName': user.screenName,
+            'image': user.image,
+            'loggedin': True
+        }
+        self.response.out.write(json.dumps(responseJson))
+
+
 class RecentStages(webapp2.RequestHandler):
 
     u"""最近の投稿を返却する.
@@ -74,6 +102,7 @@ class Activities(webapp2.RequestHandler):
 
 
 application = webapp2.WSGIApplication([
+    ('/api/login', Login),
     ('/api/recent_stages', RecentStages),
     ('/api/activities', Activities),
 ], debug=True)
