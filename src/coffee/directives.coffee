@@ -19,7 +19,7 @@ LoginController = ($scope, loginService) ->
 .directive 'recentStages', ()->
   restrict: 'E'
   replace: true
-  templateUrl: 'html/parts/recent_stages.html'
+  templateUrl: '/html/parts/recent_stages.html'
   controller: ['$scope', 'recentStagesService', RecentStagesController]
   link: (scope, element, attrs, ctrl) ->
     scope.init()
@@ -27,7 +27,7 @@ LoginController = ($scope, loginService) ->
 .directive 'activities', ()->
   restrict: 'E'
   replace: false
-  templateUrl: 'html/parts/activities.html'
+  templateUrl: '/html/parts/activities.html'
   controller: ['$scope', 'activityService', ActivitiesController]
   link: (scope, element, attrs, ctrl) ->
     scope.init()
@@ -35,7 +35,7 @@ LoginController = ($scope, loginService) ->
 .directive 'loginHeader', () ->
   restrict: 'E'
   replace: true
-  templateUrl: 'html/parts/login_header.html'
+  templateUrl: '/html/parts/login_header.html'
   controller: ['$scope', 'loginService', LoginController]
   link: (scope, element, attrs, ctrl) ->
     scope.init()
