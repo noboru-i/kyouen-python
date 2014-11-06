@@ -34,13 +34,11 @@ def to_dict(model):
 
 
 class Login(webapp2.RequestHandler):
-    u"""ログイン状態を取得する。
 
-    """
+    u"""ログイン状態を取得する."""
 
     def get(self):
         u"""ログイン状態を取得する."""
-
         # ユーザ情報を取得
         from html import get_cookie
         from html import get_user
