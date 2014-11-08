@@ -99,8 +99,18 @@ class Activities(webapp2.RequestHandler):
         self.response.out.write(json.dumps(activities))
 
 
+class StageCount(webapp2.RequestHandler):
+
+    u"""登録件数を取得する."""
+
+    def get(self):
+        u"""登録件数を取得する."""
+        stages = {'count': KyouenPuzzleSummary.all().get().count}
+        self.response.out.write(json.dumps(stages))
+
 application = webapp2.WSGIApplication([
     ('/api/login', Login),
     ('/api/recent_stages', RecentStages),
     ('/api/activities', Activities),
+    ('/api/stage_count', StageCount),
 ], debug=True)

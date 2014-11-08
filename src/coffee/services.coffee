@@ -25,3 +25,11 @@
       $http.get('/api/login').then (response) ->
         response.data
 ]
+.factory 'stageCountService', ['$http', ($http) ->
+  new class stageCountService
+    constructor: ->
+
+    fetch: ()->
+      $http.get('/api/stage_count').then (response) ->
+        response.data
+]
