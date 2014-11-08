@@ -26,10 +26,10 @@
         response.data
 ]
 .factory 'stageCountService', ['$http', ($http) ->
-  new class stageCountService
+  new class StageCountService
     constructor: ->
 
     fetch: ()->
-      $http.get('/api/stage_count').then (response) ->
+      $http.get('/api/stages/count').then (response) ->
         response.data
 ]

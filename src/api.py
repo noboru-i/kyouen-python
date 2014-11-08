@@ -112,5 +112,5 @@ application = webapp2.WSGIApplication([
     ('/api/login', Login),
     ('/api/recent_stages', RecentStages),
     ('/api/activities', Activities),
-    ('/api/stage_count', StageCount),
+    ('/api/stages/count', StageCount),
 ], debug=True)
