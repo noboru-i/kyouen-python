@@ -15,7 +15,9 @@ LoginController = ($scope, loginService) ->
     loginService.fetch().then (data) ->
       $scope.currentUser = data
 
-StagesPaginationController = ($scope, stageCountService, stageService) ->
+StagesPaginationController = ($scope,
+    $rootScope,
+    stageCountService) ->
   $scope.init = ->
     $scope.currentPage = 1
     $scope.maxSize = 10
@@ -23,8 +25,14 @@ StagesPaginationController = ($scope, stageCountService, stageService) ->
       $scope.totalItems = data.count
       $scope.pageChanged(1)
   $scope.pageChanged = ->
-    stageService.fetch($scope.currentPage).then (data) ->
-      $scope.stages = data
+    $rootScope.$broadcast('changeStage', $scope.currentPage)
+
+StagesController = ($scope, $rootScope, $document, stageService) ->
+  $scope.init = ->
+    $rootScope.$on('changeStage', (event, stageNo)->
+      stageService.fetch($scope.currentPage).then (data) ->
+        $scope.stages = data
+      )
 
 @KyouenApp
 .controller 'StagesPaginationController',
@@ -60,8 +68,33 @@ StagesPaginationController = ($scope, stageCountService, stageService) ->
   replace: true
   templateUrl: '/html/parts/stage_pager.html'
   controller: ['$scope',
-      'stageCountService',
-      'stageService',
+      '$rootScope',
+      'stageCountService'
       StagesPaginationController]
   link: (scope, element, attrs, ctrl) ->
     scope.init()
+
+.directive 'stages', () ->
+  restrict: 'E'
+  replace: true
+  templateUrl: '/html/parts/stages.html'
+  controller: ['$scope',
+      '$rootScope',
+      '$document',
+      'stageService',
+      StagesController]
+  link: (scope, element, attrs, ctrl) ->
+    scope.init()
+
+.directive 'kyouenView', () ->
+  restrict: 'E'
+  replace: true
+  scope: {
+    stageInfo: '='
+  }
+  templateUrl: '/html/parts/kyouen_view.html'
+  link: (scope, element, attrs) ->
+    v = new KyouenView($(element),
+      new KyouenModel(scope.stageInfo))
+    v.drawKyouen()
+    v.drawClear()

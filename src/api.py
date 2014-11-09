@@ -123,7 +123,11 @@ class Stages(webapp2.RequestHandler):
         cookie = get_cookie()
         twitter_user = get_user(cookie)
 
-        puzzles = KyouenPuzzle.all().filter('stageNo >', (pageNo-1) * page_per_count).order('stageNo').fetch(limit=page_per_count)
+        puzzles = (KyouenPuzzle
+                   .all()
+                   .filter('stageNo >', (pageNo-1) * page_per_count)
+                   .order('stageNo')
+                   .fetch(limit=page_per_count))
         if twitter_user:
             user = User.get_by_key_name(User.create_key(twitter_user.userId))
             for p in puzzles:
@@ -135,6 +139,7 @@ class Stages(webapp2.RequestHandler):
 
 
 def strToInt(str1):
+    u"""文字列を数値型に変換する."""
     return int(str1) if str1.isdigit() else 0
 
 application = webapp2.WSGIApplication([

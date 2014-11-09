@@ -9,7 +9,7 @@ $.fn.extend
       right: 0
       top: 0
       backgroundColor: "rgba(0, 0, 0, 0.5)"
-  
+
     option = $.extend(defaultOption, overlayConfig)
     $overlay = $("#overlay_area")
     unless $overlay.length
@@ -23,7 +23,7 @@ $.fn.extend
       # オーバレイ領域がクリックされた場合は隠す
       $overlay.hide()
       $target.hide()
-  
+
     $target.click (e) ->
       # ターゲット領域がクリックされた場合はイベントの伝達を止める
       e.stopPropagation()
