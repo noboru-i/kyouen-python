@@ -343,14 +343,14 @@ class AddStageUser(webapp2.RequestHandler):
         if not stage_user:
             # 存在しない場合は新規作成
             stage_user = StageUser(stage=stage,
-                                   user=user,
-                                   clearDate = datetime.datetime.today())
+                                   user=user)
             # 新規クリア時はUser.clearStageCountをインクリメント
             count = user.clearStageCount
             if not count:
                 count = StageUser.gql('WHERE user = :1', user).count()
             user.clearStageCount = count + 1
             user.put()
+        stage_user.clearDate = datetime.datetime.today()
         stage_user.put()
 
 class ListRanking(webapp2.RequestHandler):
