@@ -33,6 +33,20 @@ StagesController = ($scope, $rootScope, $document, stageService) ->
       stageService.fetch($scope.currentPage).then (data) ->
         $scope.stages = data
       )
+  $scope.openKyouen = (kyouenInfo)->
+    $rootScope.$broadcast('openKyouen', kyouenInfo)
+
+PlayableKeyouenViewController = ($scope, $rootScope) ->
+  $scope.init = (canvas)->
+    $scope.opend = false
+    $rootScope.$on('openKyouen', (event, kyouenInfo) ->
+      $scope.opend = true
+      c = openKyouen(canvas, kyouenInfo)
+      view = new TumeKyouenView($(c), new KyouenModel(kyouenInfo))
+      view.drawKyouen()
+      view.drawClear()
+    )
+
 
 @KyouenApp
 .controller 'StagesPaginationController',
@@ -98,3 +112,13 @@ StagesController = ($scope, $rootScope, $document, stageService) ->
       new KyouenModel(scope.stageInfo))
     v.drawKyouen()
     v.drawClear()
+
+.directive 'playableKyouenView', () ->
+  restrict: 'E'
+  replace: true
+  templateUrl: '/html/parts/playable_kyouen_view.html'
+  controller: ['$scope',
+      '$rootScope',
+      PlayableKeyouenViewController]
+  link: (scope, element, attrs) ->
+    scope.init(element.find('canvas'))

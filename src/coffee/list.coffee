@@ -183,8 +183,8 @@ class @KyouenView
 
 
 # 詰め共円領域の作成
-openKyouen = (canvas) ->
-  model = new KyouenModel(canvas)
+@openKyouen = (canvas, kyouenInfo) ->
+  model = new KyouenModel(kyouenInfo)
   # 表示領域の高さ・幅のうち、最小のものの8割をcanvasのサイズとする
   canvasSize = Math.floor((Math.min(document.body.clientWidth, document.body.clientHeight, document.documentElement.clientWidth, document.documentElement.clientHeight) - 100) * 0.8)
   canvasSize -= canvasSize % (model.size * 2) # 端数を調整
@@ -196,8 +196,8 @@ openKyouen = (canvas) ->
   $canvas = $("#canvas0")
   $button = $("#kyouenButton")
   $dialog = $("#dialog")
-  $stageNo.html model.stageNo
-  $creator.html model.creator
+  $stageNo.text model.stageNo
+  $creator.text model.creator
   $kyouenView.css
     width: (canvasSize + 50) + "px"
     height: (canvasSize + 120) + "px"
@@ -262,7 +262,7 @@ class CreateKyouenView extends KyouenView
     @drawKyouen()
 
 # 詰め共円用クラス
-class TumeKyouenView extends KyouenView
+class @TumeKyouenView extends KyouenView
   constructor: (@canvas, @model) ->
     super(@canvas, @model)
     @init()

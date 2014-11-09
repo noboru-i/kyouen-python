@@ -1,6 +1,6 @@
 #stages
   ul
-    li.overlayKyouen(ng-repeat="stageInfo in stages")
+    li.overlayKyouen(ng-repeat="stageInfo in stages" ng-click="openKyouen(stageInfo)")
       .stageno STAGE:{{stageInfo.stageNo}}
       .creator created by {{stageInfo.creator}}
       kyouen-view(stage-info="stageInfo")
