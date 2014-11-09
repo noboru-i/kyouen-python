@@ -205,11 +205,6 @@ class @KyouenView
   $canvas.attr
     width: canvasSize + "px"
     height: canvasSize + "px"
-    "data-stageno": model.stageNo
-    "data-stage": model.stage
-    "data-size": model.size
-    "data-cretor": model.creator
-    "data-clear": model.clear
     "class": "kyouenView"
 
   $button.css
@@ -219,9 +214,6 @@ class @KyouenView
   $kyouenView.unbind "click"
   $kyouenView.click (e) ->
     e.stopPropagation()
-
-  # 共円領域を表示
-  $kyouenView.show()
 
   return $canvas[0]
 

@@ -9,6 +9,7 @@ $.fn.extend
       right: 0
       top: 0
       backgroundColor: "rgba(0, 0, 0, 0.5)"
+      zIndex: 100
 
     option = $.extend(defaultOption, overlayConfig)
     $overlay = $("#overlay_area")
