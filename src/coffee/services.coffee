@@ -33,3 +33,15 @@
       $http.get('/api/stages/count').then (response) ->
         response.data
 ]
+.factory 'stageService', ['$http', ($http) ->
+  new class StageService
+    constructor: ->
+
+    fetch: (pageNo)->
+      $http({
+          url: '/api/stages'
+          method: "GET",
+          params: {page_no: pageNo}
+          }).then (response) ->
+        response.data
+]

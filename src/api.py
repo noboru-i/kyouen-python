@@ -108,9 +108,39 @@ class StageCount(webapp2.RequestHandler):
         stages = {'count': KyouenPuzzleSummary.all().get().count}
         self.response.out.write(json.dumps(stages))
 
+
+class Stages(webapp2.RequestHandler):
+
+    u"""登録ステージ情報を取得する."""
+
+    def get(self):
+        u"""登録ステージ情報を取得する."""
+        pageNo = strToInt(self.request.get('page_no'))
+        page_per_count = 10
+
+        from html import get_cookie
+        from html import get_user
+        cookie = get_cookie()
+        twitter_user = get_user(cookie)
+
+        puzzles = KyouenPuzzle.all().filter('stageNo >', (pageNo-1) * page_per_count).order('stageNo').fetch(limit=page_per_count)
+        if twitter_user:
+            user = User.get_by_key_name(User.create_key(twitter_user.userId))
+            for p in puzzles:
+                clear = StageUser.gql("WHERE stage = :1 AND user = :2", p, user).get()
+                if clear:
+                    p.clear = '1'
+        response_json = [to_dict(p) for p in puzzles]
+        self.response.out.write(json.dumps(response_json))
+
+
+def strToInt(str1):
+    return int(str1) if str1.isdigit() else 0
+
 application = webapp2.WSGIApplication([
     ('/api/login', Login),
     ('/api/recent_stages', RecentStages),
     ('/api/activities', Activities),
     ('/api/stages/count', StageCount),
+    ('/api/stages', Stages),
 ], debug=True)
