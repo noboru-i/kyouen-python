@@ -129,6 +129,7 @@ class Stages(webapp2.RequestHandler):
                    .order('stageNo')
                    .fetch(limit=page_per_count))
         if twitter_user:
+            from html import User
             user = User.get_by_key_name(User.create_key(twitter_user.userId))
             for p in puzzles:
                 clear = StageUser.gql("WHERE stage = :1 AND user = :2", p, user).get()
