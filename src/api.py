@@ -128,14 +128,24 @@ class Stages(webapp2.RequestHandler):
                    .filter('stageNo >', (pageNo-1) * page_per_count)
                    .order('stageNo')
                    .fetch(limit=page_per_count))
+        user = None
         if twitter_user:
             from html import User
             user = User.get_by_key_name(User.create_key(twitter_user.userId))
-            for p in puzzles:
-                clear = StageUser.gql("WHERE stage = :1 AND user = :2", p, user).get()
-                if clear:
-                    p.clear = '1'
-        response_json = [to_dict(p) for p in puzzles]
+
+        def has_stage_user(puzzle, user):
+            clear = (StageUser
+                     .gql("WHERE stage = :1 AND user = :2", puzzle, user)
+                     .get())
+            return clear is not None
+
+        def to_dict_puzzle(puzzle):
+            p = to_dict(puzzle)
+            if user and has_stage_user(puzzle, user):
+                p['clear'] = '1'
+            return p
+
+        response_json = [to_dict_puzzle(p) for p in puzzles]
         self.response.out.write(json.dumps(response_json))
 
 
