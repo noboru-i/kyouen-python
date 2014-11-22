@@ -1,0 +1,14 @@
+table.table.table-striped.table-bordered
+  thead
+    tr
+      th.order 順位
+      th.name(colspan="2") 名前
+      th.count クリア数
+  tbody
+    tr(ng-repeat="ranking in rankings")
+      td {{ $index + 1 }}位
+      td(width="50")
+        img(ng-src="{{ ranking.image }}" width="48" height="48")
+      td
+        a(href="https://twitter.com/{{ ranking.screenName }}" target="_blank") {{ ranking.screenName }}
+      td {{ ranking.clearStageCount }}

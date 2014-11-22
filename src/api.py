@@ -149,6 +149,22 @@ class Stages(webapp2.RequestHandler):
         self.response.out.write(json.dumps(response_json))
 
 
+class Rankings(webapp2.RequestHandler):
+
+    u"""ランキングを取得する."""
+
+    def get(self):
+        u"""ランキングを取得する."""
+        from html import User
+        users = User.all().order('-clearStageCount')
+
+        response_json = json.dumps([dict(screenName=u.screenName,
+                                         image=u.image,
+                                         clearStageCount=u.clearStageCount,
+                                         ) for u in users])
+        self.response.out.write(response_json)
+
+
 def strToInt(str1):
     u"""文字列を数値型に変換する."""
     return int(str1) if str1.isdigit() else 0
@@ -159,4 +175,5 @@ application = webapp2.WSGIApplication([
     ('/api/activities', Activities),
     ('/api/stages/count', StageCount),
     ('/api/stages', Stages),
+    ('/api/rankings', Rankings)
 ], debug=True)

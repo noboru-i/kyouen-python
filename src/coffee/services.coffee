@@ -45,3 +45,14 @@
           }).then (response) ->
         response.data
 ]
+.factory 'rankingService', ['$http', ($http) ->
+  new class rankingService
+    constructor: ->
+
+    fetch: ()->
+      $http({
+          url: '/api/rankings'
+          method: 'GET'
+          }).then (response) ->
+        response.data
+]

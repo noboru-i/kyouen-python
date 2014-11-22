@@ -47,6 +47,10 @@ PlayableKeyouenViewController = ($scope, $rootScope) ->
       view.drawClear()
     )
 
+RankingController = ($scope, rankingService) ->
+  $scope.init = ->
+    rankingService.fetch().then (data) ->
+      $scope.rankings = data
 
 @KyouenApp
 .controller 'StagesPaginationController',
@@ -122,3 +126,13 @@ PlayableKeyouenViewController = ($scope, $rootScope) ->
       PlayableKeyouenViewController]
   link: (scope, element, attrs) ->
     scope.init(element.find('canvas'))
+
+.directive 'ranking', () ->
+  restrict: 'E'
+  replace: true
+  templateUrl: '/html/parts/ranking.html'
+  controller: ['$scope',
+      'rankingService',
+      RankingController]
+  link: (scope, element, attrs) ->
+    scope.init()
