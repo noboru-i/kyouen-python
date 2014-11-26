@@ -218,7 +218,7 @@ class @KyouenView
   return $canvas[0]
 
 # 共円作成用クラス
-class CreateKyouenView extends KyouenView
+class @CreateKyouenView extends KyouenView
   constructor: (@config) ->
     super(@config.canvas, @config.model)
     @init()

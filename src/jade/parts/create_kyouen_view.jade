@@ -1,0 +1,9 @@
+div
+  #kyouen
+    canvas.kyouenView(width="612" height="612")
+  select#size_select.form-control(
+    style="margin-bottom: 20px;"
+    ng-model="selectedSize"
+    ng-options="value as key for (key, value) in sizeOptions"
+    ng-change="changeSelect()")
+  button#reset_button.btn.btn-primary(ng-disabled="disabledReset" ng-click="reset()") リセット

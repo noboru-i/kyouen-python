@@ -36,7 +36,7 @@ StagesController = ($scope, $rootScope, $document, stageService) ->
   $scope.openKyouen = (kyouenInfo)->
     $rootScope.$broadcast('openKyouen', kyouenInfo)
 
-PlayableKeyouenViewController = ($scope, $rootScope) ->
+PlayableKyouenViewController = ($scope, $rootScope) ->
   $scope.init = (canvas)->
     $scope.opend = false
     $rootScope.$on('openKyouen', (event, kyouenInfo) ->
@@ -46,6 +46,32 @@ PlayableKeyouenViewController = ($scope, $rootScope) ->
       view.drawKyouen()
       view.drawClear()
     )
+
+CreateKyouenViewController = ($scope) ->
+  $scope.selectedSize = 6
+  $scope.sizeOptions = {
+    '6x6': 6
+    '9x9': 9
+  }
+  $scope.init = (canvas) ->
+    $scope.disabledReset = true
+    $scope.v = new CreateKyouenView(
+      canvas: $(canvas)
+      model: new KyouenModel({
+        'stage': '000000000000000000000000000000000000'
+        'size' : '6'
+        })
+      onChange: (model) ->
+        if model.hasStone('1')
+          $scope.$apply () ->
+            $scope.disabledReset = false
+      )
+    $scope.v.drawKyouen()
+  $scope.changeSelect = () ->
+    $scope.v.model.size = $scope.selectedSize
+    $scope.v.reset()
+  $scope.reset = () ->
+    $scope.v.reset()
 
 RankingController = ($scope, rankingService) ->
   $scope.init = ->
@@ -123,7 +149,17 @@ RankingController = ($scope, rankingService) ->
   templateUrl: '/html/parts/playable_kyouen_view.html'
   controller: ['$scope',
       '$rootScope',
-      PlayableKeyouenViewController]
+      PlayableKyouenViewController]
+  link: (scope, element, attrs) ->
+    scope.init(element.find('canvas'))
+
+.directive 'createKyouenView', () ->
+  restrict: 'E'
+  replace: true
+  templateUrl: '/html/parts/create_kyouen_view.html'
+  controller: ['$scope',
+      '$rootScope',
+      CreateKyouenViewController]
   link: (scope, element, attrs) ->
     scope.init(element.find('canvas'))
 

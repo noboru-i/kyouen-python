@@ -1,0 +1,21 @@
+extends _layout
+
+block title
+  | 共円｜アプリ紹介
+
+block content
+  <!-- メインコンテンツ -->
+  .container
+    h2 ステージ作成
+    hr
+    #stages
+      #kyouenView
+        create-kyouen-view
+        #dialog(style="display: none; width: 620px;")
+          h2#dialogMessage(style="margin-top: 20px; margin-bottom: 50px;")
+          form.form-horizontal
+          .control-group.info
+            label#name_label.control-label(for="name") Name:
+            .controls.text-left
+              input#name(type="text")
+              a#send_button.btn.btn-primary.disabled 送信
