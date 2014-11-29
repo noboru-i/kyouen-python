@@ -17,21 +17,26 @@ LoginController = ($scope, loginService) ->
 
 StagesPaginationController = ($scope,
     $rootScope,
+    $location,
     stageCountService) ->
   $scope.init = ->
-    $scope.currentPage = 1
     $scope.maxSize = 10
     stageCountService.fetch().then (data) ->
+      $scope.currentPage = $location.search()['page_no'] || 1
       $scope.totalItems = data.count
-      $scope.pageChanged(1)
+      $scope.pageChanged()
   $scope.pageChanged = ->
     $rootScope.$broadcast('changeStage', $scope.currentPage)
 
-StagesController = ($scope, $rootScope, $document, stageService) ->
+StagesController = ($scope, $rootScope, $location, stageService) ->
   $scope.init = ->
     $rootScope.$on('changeStage', (event, stageNo)->
-      stageService.fetch($scope.currentPage).then (data) ->
+      stageService.fetch(stageNo).then (data) ->
         $scope.stages = data
+        open = $location.search()['open']
+        if open
+          index = ((open - 1) % 10)
+          $scope.openKyouen(data[index])
       )
   $scope.openKyouen = (kyouenInfo)->
     $rootScope.$broadcast('openKyouen', kyouenInfo)
@@ -123,6 +128,7 @@ RankingController = ($scope, rankingService) ->
   templateUrl: '/html/parts/stage_pager.html'
   controller: ['$scope',
       '$rootScope',
+      '$location',
       'stageCountService'
       StagesPaginationController]
   link: (scope, element, attrs, ctrl) ->
@@ -134,7 +140,7 @@ RankingController = ($scope, rankingService) ->
   templateUrl: '/html/parts/stages.html'
   controller: ['$scope',
       '$rootScope',
-      '$document',
+      '$location',
       'stageService',
       StagesController]
   link: (scope, element, attrs, ctrl) ->

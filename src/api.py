@@ -105,7 +105,8 @@ class StageCount(webapp2.RequestHandler):
 
     def get(self):
         u"""登録件数を取得する."""
-        stages = {'count': KyouenPuzzleSummary.all().get().count}
+        last_stage = KyouenPuzzle.gql('ORDER BY stageNo DESC').fetch(limit=1)
+        stages = {'count': last_stage[0].stageNo}
         self.response.out.write(json.dumps(stages))
 
 

@@ -3,8 +3,8 @@
 @KyouenApp
 .filter 'listLink', () ->
   (stageNo)->
-    index = (stageNo - 1) - (stageNo - 1) % 10
-    "/page/list.html?index=#{index}&open=#{stageNo}"
+    pageNo = Math.floor((stageNo - 1) / 10) + 1
+    "/html/list.html?page_no=#{pageNo}&open=#{stageNo}"
 .filter 'jst', ['$filter', ($filter) ->
   (date)->
     dateFilter = $filter 'date'
