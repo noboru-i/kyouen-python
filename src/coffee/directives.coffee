@@ -15,6 +15,9 @@ LoginController = ($scope, loginService) ->
     loginService.fetch().then (data) ->
       $scope.currentUser = data
 
+NavigationController = ($scope) ->
+  $scope.isCollapsed = true
+
 StagesPaginationController = ($scope,
     $rootScope,
     $location,
@@ -98,6 +101,12 @@ RankingController = ($scope, rankingService) ->
     ['$scope', 'recentStagesService', StagesPaginationController]
 
 @KyouenApp
+.directive 'navigation', ()->
+  restrict: 'E'
+  replace: true
+  templateUrl: '/html/parts/navigation.html'
+  controller: ['$scope', NavigationController]
+
 .directive 'recentStages', ()->
   restrict: 'E'
   replace: true
