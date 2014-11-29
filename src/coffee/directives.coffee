@@ -53,6 +53,7 @@ CreateKyouenViewController = ($scope) ->
     '6x6': 6
     '9x9': 9
   }
+  $scope.name = ''
   $scope.init = (canvas) ->
     $scope.disabledReset = true
     $scope.v = new CreateKyouenView(
@@ -72,6 +73,15 @@ CreateKyouenViewController = ($scope) ->
     $scope.v.reset()
   $scope.reset = () ->
     $scope.v.reset()
+  $scope.send = () ->
+    name = $scope.name
+    if name.length == 0
+      alert '名前を入力してください。'
+      return
+    $scope.v.model.creator = name
+    $scope.v.model.sendStage()
+    $scope.v.hideDialog()
+    ''
 
 RankingController = ($scope, rankingService) ->
   $scope.init = ->

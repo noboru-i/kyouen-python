@@ -179,7 +179,7 @@ class @KyouenView
 
   # ダイアログの削除
   hideDialog: ->
-    $("#dialog")?.hide();
+    $("#dialog")?.hide()
 
 
 # 詰め共円領域の作成

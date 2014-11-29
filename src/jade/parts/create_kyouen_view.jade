@@ -13,6 +13,6 @@ div
       .form-group
         label.col-sm-2.control-label(for="name") Name
         .col-sm-10
-          input#name.form-control(type="text")
+          input#name.form-control(type="text" ng-model="name")
       .form-group
-        button#send_button.btn.btn-primary 送信
+        button#send_button.btn.btn-primary(ng-click="send()") 送信
