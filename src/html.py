@@ -270,60 +270,6 @@ class AddAllStageUser(webapp2.RequestHandler):
         self.response.write(json.dumps(responseJson))
         return
 
-# リスト表示
-class ListPage(webapp2.RequestHandler):
-    def get(self):
-        index = strToInt(self.request.get('index'))
-        openStage = strToInt(self.request.get('open'))
-        
-        cookie = get_cookie()
-        twitter_user = get_user(cookie)
-
-        summary = {}
-        summary['count'] = KyouenPuzzleSummary.all().get().count or 0
-        summary['index'] = index
-        summary['open'] = openStage
-        summary['pager'] = [{
-                             'label': str((i*10)+1) + u'〜' + str((i+1)*10),
-                             'function': 'javascript:loadStage('+str((i+1)*10)+')',
-                             } for i in range(summary['count'] /10)]
-
-        template_values = {
-                           'summary': summary,
-                           }
-        if not twitter_user:
-            template_values['user'] = twitter_user
-
-        render_page(self, 'list.html', template_values)
-
-    def post(self):
-        self.get(self)
-
-class ListStages(webapp2.RequestHandler):
-    def post(self):
-        index = strToInt(self.request.get('index'))
-        
-        cookie = get_cookie()
-        twitter_user = get_user(cookie)
-
-        puzzle_query = KyouenPuzzle.all().filter('stageNo >', index).order('stageNo')
-        puzzles = puzzle_query.fetch(limit=10)
-        if twitter_user:
-            user = User.get_by_key_name(User.create_key(twitter_user.userId))
-            for p in puzzles:
-                clear = StageUser.gql("WHERE stage = :1 AND user = :2", p, user).get()
-                if clear:
-                    p.clear = '1'
-
-        response_json = json.dumps([dict(stageNo=p.stageNo,
-                                      size=p.size,
-                                      stage=p.stage,
-                                      creator=p.creator,
-                                      registDate=templatefilters.jst(p.registDate, '%Y/%m/%d %H:%M:%S'),
-                                      clear=p.clear if hasattr(p, 'clear') else '0',
-                                      ) for p in puzzles])
-        self.response.out.write(response_json)
-
 class AddStageUser(webapp2.RequestHandler):
     def post(self):
         stageNo = strToInt(self.request.get("stageNo"))
@@ -343,70 +289,22 @@ class AddStageUser(webapp2.RequestHandler):
         if not stage_user:
             # 存在しない場合は新規作成
             stage_user = StageUser(stage=stage,
-                                   user=user)
+                                   user=user,
+                                   clearDate=datetime.datetime.today())
             # 新規クリア時はUser.clearStageCountをインクリメント
             count = user.clearStageCount
             if not count:
                 count = StageUser.gql('WHERE user = :1', user).count()
             user.clearStageCount = count + 1
             user.put()
-        stage_user.clearDate = datetime.datetime.today()
+        else:
+            stage_user.clearDate = datetime.datetime.today()
         stage_user.put()
 
-class ListRanking(webapp2.RequestHandler):
-    def post(self):
-        users = User.all().order('-clearStageCount')
-
-        response_json = json.dumps([dict(screenName=u.screenName,
-                                      image=u.image,
-                                      clearStageCount=u.clearStageCount,
-                                      ) for u in users])
-        self.response.out.write(response_json)
-
-# インデックスページ表示
-class IndexPage(webapp2.RequestHandler):
-    def get(self):
-        template_values = {}
-        
-        # 最近の登録
-        recent = KyouenPuzzle.gql('ORDER BY stageNo DESC').fetch(limit=10)
-        for r in recent:
-            r.index = (r.stageNo - 1) - (r.stageNo - 1) % 10
-        template_values['recent'] = recent
-        
-        # アクティビティ
-        def _groupby_user(stage_user):
-            return {'screenName':stage_user.user.screenName, 'image':stage_user.user.image}
-        import itertools
-        activity = [(name, list(stageusers))
-                    for name, stageusers in itertools.groupby(StageUser.gql('ORDER BY clearDate DESC').fetch(limit=200), _groupby_user)]
-        template_values['activity'] = activity
-        
-        render_page(self, 'index.html', template_values)
-
-    def post(self):
-        self.get(self)
-
-class StaticPage(webapp2.RequestHandler):
-    def get(self, value=None):
-        if not value:
-            value = 'index.html'
-
-        render_page(self, value)
-
-    def post(self):
-        self.get(self)
-
-application = webapp2.WSGIApplication([('/', IndexPage),
-                                      ('/index.html', IndexPage),
-                                      ('/page/list.html', ListPage),
-                                      ('/page/list', ListStages),
-                                      ('/page/add', AddStageUser),
-                                      ('/page/ranking', ListRanking),
+application = webapp2.WSGIApplication([('/page/add', AddStageUser),
                                       ('/page/login', OauthLogin),
                                       ('/page/login_callback', OauthLoginCallBack),
                                       ('/page/logout', OauthLogout),
                                       ('/page/api_login', ApiLogin),
                                       ('/page/add_all', AddAllStageUser),
-                                      ('/page/(.*)', StaticPage),
                                       ], debug=True)
