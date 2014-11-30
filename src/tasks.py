@@ -14,6 +14,7 @@ from apnsserver import ApnsModel
 # https://github.com/djacobs/PyAPNs/blob/master/apns.py
 from libs.pyapns.apns import APNs, Payload, PayloadAlert
 
+
 # twitterに投稿
 def post_twitter(message):
     auth = tweepy.OAuthHandler(Const.TWITTER_SHARE_CONSUMER_KEY, Const.TWITTER_SHARE_CONSUMER_SECRET)
@@ -21,6 +22,7 @@ def post_twitter(message):
     api = tweepy.API(auth_handler=auth)
     api.update_status(message)
     return
+
 
 def sendGcm(gcmModel):
     from google.appengine.api import urlfetch
@@ -42,12 +44,14 @@ def sendGcm(gcmModel):
     logging.debug('regId=' + gcmModel.registrationId + ', statusCode=' + str(result.status_code))
     return result
 
+
 def sendGcmAll():
     query = GcmModel.all()
     for m in query:
         sendGcm(m)
 
     return True
+
 
 def sendApns(apnsModel):
     apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
@@ -62,11 +66,13 @@ def sendApns(apnsModel):
     apns.gateway_server.send_notification(token_hex, payload)
     logging.debug('deviceToken=' + apnsModel.deviceToken)
 
+
 def sendApnsAll():
     query = ApnsModel.all()
     for m in query:
         sendApns(m)
     return True
+
 
 class TweetTask(webapp2.RequestHandler):
     def get(self):
@@ -91,14 +97,16 @@ class TweetTask(webapp2.RequestHandler):
 
         misStageNo = min(l) - 1
         minStageNo = misStageNo - misStageNo % 10
+        import math
+        pageNo = math.floor((minStageNo - 1) / 10) + 1
         message = (creator + u'によって、ステージ：' + stage + u'が登録されました。 '
-                   u'http://my-android-server.appspot.com/page/list.html?index=%d&open=%d #共円') % (minStageNo, min(l))
+                   u'http://my-android-server.appspot.com/html/list.html?page_no=%d&open=%d #共円') % (pageNo, min(l))
         logging.info('message=' + message)
-        
+
         try:
             # twitterに投稿
             post_twitter(message)
-            
+
             # 情報削除
             query = RegistModel.all().order('registDate')
             for m in query:
@@ -113,4 +121,4 @@ class TweetTask(webapp2.RequestHandler):
         return
 
 application = webapp2.WSGIApplication([('/tasks/tweet', TweetTask),
-                                      ], debug=True)
+                                       ], debug=True)
