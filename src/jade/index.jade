@@ -1,0 +1,29 @@
+extends _layout
+
+block title
+  | 共円
+
+block content
+  <!-- メインコンテンツ -->
+  .container
+    .jumbotron
+      h1 共円
+      p
+        | 共円とは、４つの石を通る円のことです。
+        br
+        | このページでは、盤上に置かれた石から共円を指摘する、「詰め共円」が多数登録されています。
+        br
+        | ステージ一覧は
+        a.btn.btn-mini.btn-success(href="/html/list.html" target="_self") こちら »
+      p
+        | ログインすることでクリアしたステージ情報が保存出来ます。
+        br
+        a.btn.btn-primary.btn-large(href="/page/login" target="_self") Sign in with twitter »
+    .row
+      .col-md-6
+        h2 最新の登録
+        recent-stages
+      .col-md-6
+        h2 アクティビティ
+        activities
+      .span1

@@ -1,0 +1,18 @@
+div
+  #kyouen
+    canvas.kyouenView(width="612" height="612")
+  select#size_select.form-control(
+    style="margin-bottom: 20px;"
+    ng-model="selectedSize"
+    ng-options="value as key for (key, value) in sizeOptions"
+    ng-change="changeSelect()")
+  button#reset_button.btn.btn-primary(ng-disabled="disabledReset" ng-click="reset()") リセット
+  #dialog(style="display: none; width: 620px; height: 176px; padding-right: 20px; padding-left: 20px;")
+    h2#dialogMessage(style="margin-top: 20px; margin-bottom: 20px;")
+    form.form-horizontal(role="form")
+      .form-group
+        label.col-sm-2.control-label(for="name") Name
+        .col-sm-10
+          input#name.form-control(type="text" ng-model="name")
+      .form-group
+        button#send_button.btn.btn-primary(ng-click="send()") 送信

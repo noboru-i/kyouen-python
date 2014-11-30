@@ -5,7 +5,7 @@ String::replaceCharAt = (at, replaceChar) ->
   before + replaceChar + after
 
 # 共円表示用クラス
-class KyouenView
+class @KyouenView
   # コンストラクタ
   # @canvas canvasエレメント
   # @model KyouenModelオブジェクト
@@ -35,7 +35,7 @@ class KyouenView
     stoneSize = Math.floor(width / size / 2)
     stoneSize -= width % size
     return stoneSize
-  
+
   # 背景の描画
   drawBackground: (ctx) ->
     size = @model.size
@@ -48,7 +48,7 @@ class KyouenView
     ctx.fillStyle = "rgb(0, 218, 0)"
     ctx.fillRect 0, 0, stoneSize * 2 * size, stoneSize * 2 * size
     ctx.strokeRect 0, 0, stoneSize * 2 * size, stoneSize * 2 * size
-  
+
     for i in [0..size]
       ctx.beginPath()
       ctx.moveTo stoneSize * 2 * (i + 0.5), 0
@@ -89,7 +89,7 @@ class KyouenView
     ctx.lineWidth = 5
     ctx.beginPath()
     ctx.strokeStyle = "rgb(252, 0, 0)"
-  
+
     if kyouenData.isLine
       # 直線の場合
       line = kyouenData.line
@@ -162,7 +162,7 @@ class KyouenView
     $dialog.click (e) =>
       if e.target.id is "dialogMessage"
         @hideDialog()
-  
+
     $dialog.hover ()->
       $dialog.stop().animate {
           backgroundColor: "#fff"
@@ -179,12 +179,12 @@ class KyouenView
 
   # ダイアログの削除
   hideDialog: ->
-    $("#dialog")?.hide();
+    $("#dialog")?.hide()
 
 
 # 詰め共円領域の作成
-openKyouen = (canvas) ->
-  model = new KyouenModel(canvas)
+@openKyouen = (canvas, kyouenInfo) ->
+  model = new KyouenModel(kyouenInfo)
   # 表示領域の高さ・幅のうち、最小のものの8割をcanvasのサイズとする
   canvasSize = Math.floor((Math.min(document.body.clientWidth, document.body.clientHeight, document.documentElement.clientWidth, document.documentElement.clientHeight) - 100) * 0.8)
   canvasSize -= canvasSize % (model.size * 2) # 端数を調整
@@ -196,8 +196,8 @@ openKyouen = (canvas) ->
   $canvas = $("#canvas0")
   $button = $("#kyouenButton")
   $dialog = $("#dialog")
-  $stageNo.html model.stageNo
-  $creator.html model.creator
+  $stageNo.text model.stageNo
+  $creator.text model.creator
   $kyouenView.css
     width: (canvasSize + 50) + "px"
     height: (canvasSize + 120) + "px"
@@ -205,11 +205,6 @@ openKyouen = (canvas) ->
   $canvas.attr
     width: canvasSize + "px"
     height: canvasSize + "px"
-    "data-stageno": model.stageNo
-    "data-stage": model.stage
-    "data-size": model.size
-    "data-cretor": model.creator
-    "data-clear": model.clear
     "class": "kyouenView"
 
   $button.css
@@ -220,13 +215,10 @@ openKyouen = (canvas) ->
   $kyouenView.click (e) ->
     e.stopPropagation()
 
-  # 共円領域を表示
-  $kyouenView.show()
-
   return $canvas[0]
 
 # 共円作成用クラス
-class CreateKyouenView extends KyouenView
+class @CreateKyouenView extends KyouenView
   constructor: (@config) ->
     super(@config.canvas, @config.model)
     @init()
@@ -262,7 +254,7 @@ class CreateKyouenView extends KyouenView
     @drawKyouen()
 
 # 詰め共円用クラス
-class TumeKyouenView extends KyouenView
+class @TumeKyouenView extends KyouenView
   constructor: (@canvas, @model) ->
     super(@canvas, @model)
     @init()
@@ -298,7 +290,7 @@ class TumeKyouenView extends KyouenView
         @drawKyouenData ctx, kyouenData
         $.post "/page/add",
           stageNo: @model.stageNo
-  
+
         $(@model.canvas).attr "data-clear": "1"
         @model.clear = "1"
         # 親canvasにクリア情報を付ける
@@ -325,13 +317,13 @@ class TumeKyouenView extends KyouenView
       $stageNo.removeClass "clear"
 
 # 共円クラスの定義
-class KyouenModel
-  constructor: (canvas) ->
-    @stageNo = Number(canvas.getAttribute("data-stageno"))
-    @stage = canvas.getAttribute("data-stage")
-    @size = Number(canvas.getAttribute("data-size"))
-    @creator = canvas.getAttribute("data-creator")
-    @clear = canvas.getAttribute("data-clear")
+class @KyouenModel
+  constructor: (stageInfo) ->
+    @stageNo = stageInfo.stageNo
+    @stage = stageInfo.stage
+    @size = stageInfo.size
+    @creator = stageInfo.creator
+    @clear = stageInfo.clear
 
   # XY座標をインデックスに変換
   position2Index: (x, y) ->
@@ -377,10 +369,10 @@ class KyouenModel
   isKyouen: (p1, p2, p3, p4) ->
     # p1,p2の垂直二等分線を求める
     l12 = p1.getMidperpendicular(p2)
-    
+
     # p2,p3の垂直二等分線を求める
     l23 = p2.getMidperpendicular(p3)
-    
+
     # 交点を求める
     intersection123 = @getIntersection(l12, l23)
     unless intersection123?
@@ -436,7 +428,7 @@ class KyouenModel
   sendStage: () ->
     url = '/kyouen/regist'
     tmpStage = @stage.replace /2/g, '1'
-    param = 
+    param =
       data: [@size, tmpStage, @creator].join(',')
     callback = (data) ->
       reg = new RegExp('success stageNo=([0-9]*)');
@@ -514,16 +506,6 @@ class KyouenData
 
 $ = jQuery
 $.fn.extend
-  kyouen: (config) ->
-    views = [];
-    for c in $(this)
-      k = new KyouenModel(c)
-      view = new KyouenView($(c), k)
-      view.drawKyouen()
-      view.drawClear()
-      views.push view
-    views
-
   overlayPlayableKyouen: (config) ->
     this.click ->
       c = openKyouen $("canvas", this)[0]

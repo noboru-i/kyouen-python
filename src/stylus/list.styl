@@ -1,0 +1,106 @@
+/* list */
+/*
+ * ステージ一覧
+ */
+div#stages {
+	text-align: center;
+}
+
+div#stages div.stageno {
+	font-size: 1.2em;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+div#stages div.clear {
+	color: #f00;
+}
+
+div#stages div.creator {
+	text-align: right;
+}
+
+div#stages>ul>li {
+	background-color: #eee;
+	border: 1px solid #333;
+	margin: 5px;
+	padding: 7px;
+	display: inline-block;
+	cursor: pointer;
+	-webkit-transition: background-color 0.2s linear;
+}
+
+div#stages>ul>li:hover {
+	background-color: #8ae;
+	-webkit-transition: background-color 0.2s linear;
+}
+
+/*
+ * オーバーレイ
+ */
+div#kyouenView {
+	background: #eee;
+	text-align: center;
+	border: 3px solid #000;
+}
+
+div#kyouenView div#stageno0 {
+	margin-top: 5px;
+	font-size: 2em;
+	font-weight: bold;
+	text-decoration: underline;
+}
+div#kyouenView div#stageno0:before {
+	content: "STAGE:";
+}
+
+div#kyouenView div#stageno0.clear {
+	color: #f00;
+}
+
+div#kyouenView div#creator0 {
+	margin-top: -5px;
+	margin-bottom: 5px;
+	font-size: 1.2em;
+	text-align: right;
+	margin-right: 25px;
+}
+div#kyouenView div#creator0:before {
+	content: "created by ";
+}
+
+div#dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	background: #eee;
+	text-align: center;
+	border: 3px solid #333;
+	color: #333;
+	height: 100px;
+}
+
+#notification {
+	position: fixed;
+	top: 15%;
+	right: 0;
+	background: #eee;
+	background: rgba(238, 238, 238, 0.6);
+	border-top: 2px solid #333;
+	border-left: 2px solid #333;
+	border-bottom: 2px solid #333;
+	text-align: right;
+	padding-right: 5px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.pagination__wapper {
+	text-align center
+}

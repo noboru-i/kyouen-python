@@ -1,0 +1,11 @@
+table.table.table-striped(style="width:100%")
+  tbody
+    tr(ng-repeat="recentStage in recentStages")
+      td
+        a(ng-href="{{recentStage.stageNo|listLink}}" target="_self")
+          span STAGE:
+          span(ng-bind="recentStage.stageNo")
+        .creator.text-right created by&nbsp;
+          span(ng-bind="recentStage.creator")
+        .date.text-right(ng-bind="recentStage.registDate|jst")
+

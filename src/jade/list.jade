@@ -1,0 +1,21 @@
+extends _layout
+
+block title
+  | 共円｜ステージ一覧
+
+block content
+  <!-- メインコンテンツ -->
+  .container
+  .row
+    stage-pager
+  .row
+    stages
+  .row
+    stage-pager
+
+  playable-kyouen-view
+
+  <!-- 通知領域 -->
+  #notification
+    | ログインすることで<br>クリア履歴を保存出来ます<br>
+    a.btn.btn-primary.btn-large(href="/page/login" target="_self") Sign in with twitter »

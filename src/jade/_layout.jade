@@ -1,0 +1,33 @@
+doctype html
+html(ng-app="kyouenApp" ng-strict-di)
+  head
+    meta(charset='UTF-8')
+    meta(property="og:title" content="共円")
+    meta(property="og:type" content="website")
+    meta(property="og:url" content="http://my-android-server.appspot.com/")
+    meta(property="og:image" content="http://my-android-server.appspot.com/image/high.png")
+    meta(property="og:site_name" content="共円")
+    meta(property="fb:app_id" content="232663426789090")
+    meta(property="og:description" content="共円とは、４つの石を通る円のことです。このページでは、盤上に置かれた石から共円を指摘する、「詰め共円」が多数登録されています。")
+    meta(name="twitter:card" content="summary")
+    title
+      block title
+    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/css/app.css")
+    base(href="/")
+
+  body
+    <!-- ヘッダ -->
+    navigation
+    <!-- コンテンツ -->
+    block content
+    <!-- フッタ -->
+    footer.text-center
+      hr
+      span Copyright 2013-2014 noboru All Rights Reserved.
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js")
+    script(src="/js/app.js")
