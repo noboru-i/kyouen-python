@@ -1,19 +1,16 @@
 'use strict'
 
 RecentStagesController = ($scope, recentStagesService) ->
-  $scope.init = ->
-    recentStagesService.fetch().then (data) ->
-      $scope.recentStages = data
+  recentStagesService.fetch().then (data) ->
+    $scope.recentStages = data
 
 ActivitiesController = ($scope, activityService) ->
-  $scope.init = ->
-    activityService.fetch().then (data) ->
-      $scope.activities = data
+  activityService.fetch().then (data) ->
+    $scope.activities = data
 
 LoginController = ($scope, loginService) ->
-  $scope.init = ->
-    loginService.fetch().then (data) ->
-      $scope.currentUser = data
+  loginService.fetch().then (data) ->
+    $scope.currentUser = data
 
 NavigationController = ($scope, $location) ->
   $scope.isCollapsed = true
@@ -24,38 +21,35 @@ StagesPaginationController = ($scope,
     $rootScope,
     $location,
     stageCountService) ->
-  $scope.init = ->
-    $scope.maxSize = 10
-    stageCountService.fetch().then (data) ->
-      $scope.currentPage = $location.search()['page_no'] || 1
-      $scope.totalItems = data.count
-      $scope.pageChanged()
+  $scope.maxSize = 10
+  stageCountService.fetch().then (data) ->
+    $scope.currentPage = $location.search()['page_no'] || 1
+    $scope.totalItems = data.count
+    $scope.pageChanged()
   $scope.pageChanged = ->
     $rootScope.$broadcast('changeStage', $scope.currentPage)
 
 StagesController = ($scope, $rootScope, $location, stageService) ->
-  $scope.init = ->
-    $rootScope.$on('changeStage', (event, stageNo)->
-      stageService.fetch(stageNo).then (data) ->
-        $scope.stages = data
-        open = $location.search()['open']
-        if open
-          index = ((open - 1) % 10)
-          $scope.openKyouen(data[index])
-      )
+  $rootScope.$on('changeStage', (event, stageNo)->
+    stageService.fetch(stageNo).then (data) ->
+      $scope.stages = data
+      open = $location.search()['open']
+      if open
+        index = ((open - 1) % 10)
+        $scope.openKyouen(data[index])
+    )
   $scope.openKyouen = (kyouenInfo)->
     $rootScope.$broadcast('openKyouen', kyouenInfo)
 
 PlayableKyouenViewController = ($scope, $rootScope) ->
-  $scope.init = (canvas)->
-    $scope.opend = false
-    $rootScope.$on('openKyouen', (event, kyouenInfo) ->
-      $scope.opend = true
-      c = openKyouen(canvas, kyouenInfo)
-      view = new TumeKyouenView($(c), new KyouenModel(kyouenInfo))
-      view.drawKyouen()
-      view.drawClear()
-    )
+  $scope.opend = false
+  $rootScope.$on('openKyouen', (event, kyouenInfo) ->
+    $scope.opend = true
+    c = openKyouen(canvas, kyouenInfo)
+    view = new TumeKyouenView($(c), new KyouenModel(kyouenInfo))
+    view.drawKyouen()
+    view.drawClear()
+  )
 
 CreateKyouenViewController = ($scope) ->
   $scope.selectedSize = 6
@@ -94,9 +88,8 @@ CreateKyouenViewController = ($scope) ->
     ''
 
 RankingController = ($scope, rankingService) ->
-  $scope.init = ->
-    rankingService.fetch().then (data) ->
-      $scope.rankings = data
+  rankingService.fetch().then (data) ->
+    $scope.rankings = data
 
 @KyouenApp
 .controller 'StagesPaginationController',
@@ -114,24 +107,18 @@ RankingController = ($scope, rankingService) ->
   replace: true
   templateUrl: '/html/parts/recent_stages.html'
   controller: ['$scope', 'recentStagesService', RecentStagesController]
-  link: (scope, element, attrs, ctrl) ->
-    scope.init()
 
 .directive 'activities', ()->
   restrict: 'E'
   replace: false
   templateUrl: '/html/parts/activities.html'
   controller: ['$scope', 'activityService', ActivitiesController]
-  link: (scope, element, attrs, ctrl) ->
-    scope.init()
 
 .directive 'loginHeader', () ->
   restrict: 'E'
   replace: true
   templateUrl: '/html/parts/login_header.html'
   controller: ['$scope', 'loginService', LoginController]
-  link: (scope, element, attrs, ctrl) ->
-    scope.init()
 
 .directive 'stagePager', () ->
   restrict: 'E'
@@ -142,8 +129,6 @@ RankingController = ($scope, rankingService) ->
       '$location',
       'stageCountService'
       StagesPaginationController]
-  link: (scope, element, attrs, ctrl) ->
-    scope.init()
 
 .directive 'stages', () ->
   restrict: 'E'
@@ -154,8 +139,6 @@ RankingController = ($scope, rankingService) ->
       '$location',
       'stageService',
       StagesController]
-  link: (scope, element, attrs, ctrl) ->
-    scope.init()
 
 .directive 'kyouenView', () ->
   restrict: 'E'
@@ -197,5 +180,3 @@ RankingController = ($scope, rankingService) ->
   controller: ['$scope',
       'rankingService',
       RankingController]
-  link: (scope, element, attrs) ->
-    scope.init()
