@@ -6,15 +6,15 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href="/") 共円
+      a.navbar-brand(href="/" target="_self") 共円
     .collapse.navbar-collapse(collapse="isCollapsed")
       ul.nav.navbar-nav
-        li
-          a(href="/html/list.html") ステージ一覧
-        li
-          a(href="/html/create.html") ステージ作成
-        li
-          a(href="/html/ranking.html") ランキング
-        li
-          a(href="/html/application.html") アプリ
+        li(ng-class="{active: isActive('list.html')}")
+          a(href="/html/list.html" target="_self") ステージ一覧
+        li(ng-class="{active: isActive('create.html')}")
+          a(href="/html/create.html" target="_self") ステージ作成
+        li(ng-class="{active: isActive('ranking.html')}")
+          a(href="/html/ranking.html" target="_self") ランキング
+        li(ng-class="{active: isActive('application.html')}")
+          a(href="/html/application.html" target="_self") アプリ
       login-header
