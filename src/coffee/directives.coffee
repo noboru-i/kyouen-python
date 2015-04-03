@@ -42,14 +42,18 @@ StagesController = ($scope, $rootScope, $location, stageService) ->
     $rootScope.$broadcast('openKyouen', kyouenInfo)
 
 PlayableKyouenViewController = ($scope, $rootScope) ->
-  $scope.opend = false
-  $rootScope.$on('openKyouen', (event, kyouenInfo) ->
-    $scope.opend = true
-    c = openKyouen(canvas, kyouenInfo)
-    view = new TumeKyouenView($(c), new KyouenModel(kyouenInfo))
-    view.drawKyouen()
-    view.drawClear()
-  )
+  $scope.init = (canvas)->
+    $scope.opend = false
+    $rootScope.$on('openKyouen', (event, kyouenInfo) ->
+      $scope.opend = true
+      c = openKyouen(canvas, kyouenInfo)
+      view = new TumeKyouenView($(c), new KyouenModel(kyouenInfo))
+      view.drawKyouen()
+      view.drawClear()
+      # クリックするまで表示されないバグ対応
+      setTimeout () ->
+        $(canvas).click()
+    )
 
 CreateKyouenViewController = ($scope) ->
   $scope.selectedSize = 6
