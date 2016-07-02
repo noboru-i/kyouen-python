@@ -4,6 +4,7 @@
 import logging
 import tweepy
 import webapp2
+import json
 from google.appengine.ext import db
 
 from kyouenserver import RegistModel
@@ -60,7 +61,7 @@ def sendFcmAll():
                    'to': '/topics/all',
                    "data.message": "fcm message!!!"
     }
-    form_data = urllib.urlencode(form_fields)
+    form_data = json.dumps(form_fields)
     result = urlfetch.fetch(url='https://fcm.googleapis.com/fcm/send',
                             payload=form_data,
                             method=urlfetch.POST,
