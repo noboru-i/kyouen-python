@@ -4,6 +4,7 @@
 import logging
 import tweepy
 import webapp2
+import json
 from google.appengine.ext import db
 
 from kyouenserver import RegistModel
@@ -52,6 +53,24 @@ def sendGcmAll():
 
     return True
 
+def sendFcmAll():
+    from google.appengine.api import urlfetch
+    import urllib
+
+    form_fields = {
+                   'to': '/topics/all',
+                   "data.message": "fcm message!!!"
+    }
+    form_data = json.dumps(form_fields)
+    result = urlfetch.fetch(url='https://fcm.googleapis.com/fcm/send',
+                            payload=form_data,
+                            method=urlfetch.POST,
+                            headers={
+                                     'Content-Type': 'application/json',
+                                     'Authorization': 'key=' + Const.FCM_API_KEY
+                                     })
+    logging.debug('content=' + str(result.content) + ', statusCode=' + str(result.status_code))
+    return result
 
 def sendApns(apnsModel):
     apns = APNs(use_sandbox=False, cert_file='certificate/aps_production.pem')  # 本番
@@ -116,6 +135,8 @@ class TweetTask(webapp2.RequestHandler):
 
         # GCMで送信
         sendGcmAll()
+        # FCMで送信
+        sendFcmAll()
         # APNSで送信
         sendApnsAll()
         return
