@@ -1,5 +1,5 @@
 application: my-android-server
-version: 3-0
+version: 3-1
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -8,10 +8,6 @@ builtins:
 - remote_api: on
 
 handlers:
-- url: /webapp.txt
-  static_files: webapp.txt
-  upload: webapp\.txt
-
 - url: /robots.txt
   static_files: robots.txt
   upload: robots\.txt
