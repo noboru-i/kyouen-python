@@ -4,7 +4,7 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 # 時計回りに90度回転させる。
 def rot(stage, size):
@@ -26,33 +26,31 @@ def mirror(stage, size):
     return ''.join(temp)
 
 # パズルのステージ情報
-class KyouenPuzzle(db.Model):
+class KyouenPuzzle(ndb.Model):
     # ステージ番号
-    stageNo = db.IntegerProperty(required=True)
+    stageNo = ndb.IntegerProperty(required=True)
     # サイズ
-    size = db.IntegerProperty(required=True)
+    size = ndb.IntegerProperty(required=True)
     # ステージ上の石の配置
-    stage = db.StringProperty(required=True)
+    stage = ndb.StringProperty(required=True)
     # 作者
-    creator = db.StringProperty()
+    creator = ndb.StringProperty()
     # 登録日
-    registDate = db.DateTimeProperty(auto_now_add=True)
+    registDate = ndb.DateTimeProperty(auto_now_add=True)
 
 # ステージ情報サマリ
-class KyouenPuzzleSummary(db.Model):
+class KyouenPuzzleSummary(ndb.Model):
     # ステージ合計
-    count = db.IntegerProperty()
+    count = ndb.IntegerProperty()
     # 最終更新日時
-    lastDate = db.DateTimeProperty(auto_now_add=True)
+    lastDate = ndb.DateTimeProperty(auto_now_add=True)
 
 # 登録情報
-class RegistModel(db.Model):
+class RegistModel(ndb.Model):
     # ステージ情報
-    stageInfo = db.ReferenceProperty(required=True,
-                                     reference_class=KyouenPuzzle)
+    stageInfo = ndb.KeyProperty(required=True, kind=KyouenPuzzle)
     # 登録日
-    registDate = db.DateTimeProperty(required=True,
-                                     auto_now_add=True)
+    registDate = ndb.DateTimeProperty(required=True, auto_now_add=True)
 
 # 登録処理
 class KyouenRegist(webapp2.RequestHandler):
@@ -132,8 +130,8 @@ class KyouenRegist(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'text/plain'
             self.response.out.write("registered")
             return
-        
-        # 入力データの登録    
+
+        # 入力データの登録
         model = KyouenPuzzle(stageNo=self.getNextStageNo(),
                              size=int(data[0]),
                              stage=data[1],
@@ -141,11 +139,11 @@ class KyouenRegist(webapp2.RequestHandler):
         model.put()
 
         # DB登録
-        regist_model = RegistModel(stageInfo=model)
+        regist_model = RegistModel(stageInfo=model.key)
         regist_model.put()
-        
+
         # サマリの再計算
-        summary = KyouenPuzzleSummary.all().get()
+        summary = KyouenPuzzleSummary.query().get()
         if not summary:
             c = KyouenPuzzle.all().count()
             summary = KyouenPuzzleSummary(count=c)

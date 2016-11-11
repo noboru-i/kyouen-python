@@ -9,7 +9,7 @@ import datetime
 import jinja2
 import webapp2
 import json
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 from google.appengine.api import memcache
 
 from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
@@ -27,29 +27,29 @@ from app import templatefilters
 JINJA_ENVIRONMENT.filters['jst'] = templatefilters.jst
 JINJA_ENVIRONMENT.filters['list_link'] = templatefilters.list_link
 
-class RequestToken(db.Model):
-    token_key = db.StringProperty(required=True)
-    token_secret = db.StringProperty(required=True)
-    creation_date = db.DateTimeProperty(auto_now_add=True)
+class RequestToken(ndb.Model):
+    token_key = ndb.StringProperty(required=True)
+    token_secret = ndb.StringProperty(required=True)
+    creation_date = ndb.DateTimeProperty(auto_now_add=True)
 
 # ユーザデータ
-class User(db.Model):
-    userId = db.StringProperty(required=True)
-    screenName = db.StringProperty()
-    image = db.StringProperty()
-    accessToken = db.StringProperty()
-    accessSecret = db.StringProperty()
-    clearStageCount = db.IntegerProperty()
-    
+class User(ndb.Model):
+    userId = ndb.StringProperty(required=True)
+    screenName = ndb.StringProperty()
+    image = ndb.StringProperty()
+    accessToken = ndb.StringProperty()
+    accessSecret = ndb.StringProperty()
+    clearStageCount = ndb.IntegerProperty()
+
     @staticmethod
     def create_key(userId):
         return(USER_KEY_PREFIX + userId)
 
 # ステージ・ユーザ接続データ
-class StageUser(db.Model):
-    stage = db.ReferenceProperty(reference_class=KyouenPuzzle, required=True)
-    user = db.ReferenceProperty(reference_class=User, required=True)
-    clearDate = db.DateTimeProperty(required=True)
+class StageUser(ndb.Model):
+    stage = ndb.KeyProperty(kind=KyouenPuzzle, required=True)
+    user = ndb.KeyProperty(kind=User, required=True)
+    clearDate = ndb.DateTimeProperty(required=True)
 
 # cookieの取得
 def get_cookie():
@@ -78,7 +78,7 @@ def get_twitter_data(cookie):
     access_token = None
     if cookie.has_key('sid'):
         access_token = memcache.get(cookie['sid'].value) #@UndefinedVariable
-    
+
     if not access_token:
         return None
 
@@ -109,7 +109,7 @@ def get_user(cookie):
 # ページを描画
 def render_page(handler, page, values=None):
     cookie = set_uuid(handler)
-    
+
     template_values = values or {}
     if not template_values.has_key('user'):
         template_values['user'] = get_user(cookie)
@@ -159,7 +159,7 @@ class OauthLoginCallBack(webapp2.RequestHandler):
             return
 
         request_token = RequestToken.gql("WHERE token_key=:1", request_token_key).get()
-        request_token.delete()
+        request_token.key.delete()
 
         auth = tweepy.OAuthHandler(Const.CONSUMER_KEY, Const.CONSUMER_SECRET)
         auth.set_request_token(request_token.token_key, request_token.token_secret)
@@ -168,7 +168,7 @@ class OauthLoginCallBack(webapp2.RequestHandler):
         memcache.set(cookie['sid'].value, access_token, SESSION_EXPIRE) #@UndefinedVariable
 
         twitter_user = get_twitter_data(cookie)
-        user = User.get_or_insert(key_name=User.create_key(twitter_user['id']),
+        user = User.get_or_insert(User.create_key(twitter_user['id']),
                                   userId=twitter_user['id'])
         user.accessToken = access_token.key
         user.accessSecret = access_token.secret
@@ -277,7 +277,7 @@ class AddStageUser(webapp2.RequestHandler):
         if stageNo is 0:
             logging.error('invalid parameter')
             return
-        stage = KyouenPuzzle.all().filter('stageNo =', stageNo).get()
+        stage = KyouenPuzzle.query(KyouenPuzzle.stageNo == stageNo).get()
         cookie = get_cookie()
         user = get_user(cookie)
         if not user:
@@ -285,11 +285,11 @@ class AddStageUser(webapp2.RequestHandler):
                                       userId='0',
                                       screenName='Guest',
                                       image='http://my-android-server.appspot.com/image/icon.png')
-        stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage, user).get()
+        stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage.key, user.key).get()
         if not stage_user:
             # 存在しない場合は新規作成
-            stage_user = StageUser(stage=stage,
-                                   user=user,
+            stage_user = StageUser(stage=stage.key,
+                                   user=user.key,
                                    clearDate=datetime.datetime.today())
             # 新規クリア時はUser.clearStageCountをインクリメント
             count = user.clearStageCount

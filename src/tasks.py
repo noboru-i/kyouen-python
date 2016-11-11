@@ -5,7 +5,7 @@ import logging
 import tweepy
 import webapp2
 import json
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 from kyouenserver import RegistModel
 from const import Const
@@ -129,7 +129,7 @@ class TweetTask(webapp2.RequestHandler):
             # 情報削除
             query = RegistModel.all().order('registDate')
             for m in query:
-                db.delete(m)
+                ndb.delete(m)
         except:
             return
 

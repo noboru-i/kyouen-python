@@ -4,14 +4,14 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 # APNSモデル
-class ApnsModel(db.Model):
+class ApnsModel(ndb.Model):
     # 登録ID
-    deviceToken = db.StringProperty()
+    deviceToken = ndb.StringProperty()
     # 登録日
-    registDate = db.DateTimeProperty(auto_now_add=True)
+    registDate = ndb.DateTimeProperty(auto_now_add=True)
 
 # 登録処理
 class ApnsRegist(webapp2.RequestHandler):
@@ -42,7 +42,7 @@ class ApnsRegist(webapp2.RequestHandler):
             responseJson = {'message': 'already registed'}
             self.response.write(json.dumps(responseJson))
             return
-        
+
         # 入力データの登録
         model = ApnsModel(deviceToken=device_token)
         model.put()
