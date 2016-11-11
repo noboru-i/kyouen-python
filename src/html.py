@@ -197,7 +197,7 @@ class ApiLogin(webapp2.RequestHandler):
 
         # DBへユーザ情報を登録
         twitter_user = get_twitter_data(cookie)
-        user = User.get_or_insert(key_name=User.create_key(twitter_user['id']),
+        user = User.get_or_insert(User.create_key(twitter_user['id']),
                                   userId=twitter_user['id'])
         user.accessToken = access_token.key
         user.accessSecret = access_token.secret
@@ -240,12 +240,12 @@ class AddAllStageUser(webapp2.RequestHandler):
             if stageNo is 0:
                 logging.error('invalid parameter')
                 continue
-            stage = KyouenPuzzle.all().filter('stageNo =', stageNo).get()
-            stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage, user).get()
+            stage = KyouenPuzzle.query(KyouenPuzzle.stageNo == stageNo).get()
+            stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage.key, user.key).get()
             if not stage_user:
                 # 存在しない場合は新規作成
-                stage_user = StageUser(stage = stage,
-                                       user = user,
+                stage_user = StageUser(stage = stage.key,
+                                       user = user.key,
                                        clearDate = datetime.datetime.strptime(clearDate, '%Y-%m-%d %H:%M:%S'))
                 # 新規クリア時はUser.clearStageCountをインクリメント
                 count = user.clearStageCount
@@ -258,10 +258,10 @@ class AddAllStageUser(webapp2.RequestHandler):
             clearStageNoList.append(stageNo)
 
         # 送信されていないステージ情報を返す
-        stageUsers = StageUser.gql('WHERE user = :1', user)
+        stageUsers = StageUser.gql('WHERE user = :1', user.key)
         syncStageList = []
         for stageUser in stageUsers:
-            stage = stageUser.stage
+            stage = stageUser.stage.get()
             if stage.stageNo not in clearStageNoList:
                 syncStageList.append({'stageNo' : stage.stageNo,
                                       'clearDate' : stageUser.clearDate.strftime('%Y-%m-%d %H:%M:%S')})
@@ -281,7 +281,7 @@ class AddStageUser(webapp2.RequestHandler):
         cookie = get_cookie()
         user = get_user(cookie)
         if not user:
-            user = User.get_or_insert(key_name=User.create_key('0'),
+            user = User.get_or_insert(User.create_key('0'),
                                       userId='0',
                                       screenName='Guest',
                                       image='http://my-android-server.appspot.com/image/icon.png')

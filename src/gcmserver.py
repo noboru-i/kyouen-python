@@ -9,7 +9,7 @@ from google.appengine.ext import ndb
 from const import Const
 
 # GCMモデル
-class GcmModel(db.Model):
+class GcmModel(ndb.Model):
     # 登録ID
     registrationId = ndb.StringProperty()
     # 登録日

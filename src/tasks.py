@@ -47,7 +47,7 @@ def sendGcm(gcmModel):
 
 
 def sendGcmAll():
-    query = GcmModel.all()
+    query = GcmModel.query()
     for m in query:
         sendGcm(m)
 
@@ -87,7 +87,7 @@ def sendApns(apnsModel):
 
 
 def sendApnsAll():
-    query = ApnsModel.all()
+    query = ApnsModel.query()
     for m in query:
         sendApns(m)
     return True
@@ -97,8 +97,8 @@ class TweetTask(webapp2.RequestHandler):
     def get(self):
         max_disp = 5
 
-        query = RegistModel.all().order('registDate')
-        s = set(m.stageInfo.creator for m in query)
+        query = RegistModel.query().order(RegistModel.registDate)
+        s = set(m.stageInfo.get().creator for m in query)
         if len(s) == 0:
             # 登録されてない場合、終了
             return
@@ -108,8 +108,8 @@ class TweetTask(webapp2.RequestHandler):
         if length > max_disp:
             creator += u' たち'
 
-        query = RegistModel.all().order('registDate')
-        l = [m.stageInfo.stageNo for m in query]
+        query = RegistModel.query().order(RegistModel.registDate)
+        l = [m.stageInfo.get().stageNo for m in query]
         stage = str(l[0])
         if len(l) > 1:
             stage += u'～' + str(max(l))
@@ -125,13 +125,12 @@ class TweetTask(webapp2.RequestHandler):
         try:
             # twitterに投稿
             post_twitter(message)
-
-            # 情報削除
-            query = RegistModel.all().order('registDate')
-            for m in query:
-                ndb.delete(m)
         except:
             return
+
+        # 情報削除
+        query = RegistModel.query().order(RegistModel.registDate)
+        ndb.delete_multi([m.key for m in query])
 
         # GCMで送信
         sendGcmAll()

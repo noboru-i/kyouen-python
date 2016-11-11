@@ -164,7 +164,7 @@ class KyouenGet(webapp2.RequestHandler):
         stageNo = int(self.request.get('stageNo', '0'))
         count = int(self.request.get('count', '10'))
 
-        data = KyouenPuzzle.all().filter('stageNo >', stageNo).fetch(count)
+        data = KyouenPuzzle.query(KyouenPuzzle.stageNo > stageNo).fetch(count)
 
         if dataType is None:
             def generateSendData(model):
