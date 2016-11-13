@@ -9,7 +9,6 @@ import logging
 import webapp2
 import json
 import datetime
-from google.appengine.ext import db
 
 from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
 from html import StageUser
@@ -26,7 +25,7 @@ def to_dict(model):
     if hasattr(model, '__iter__'):
         return [to_dict(item) for item in model]
 
-    for key, prop in model.properties().iteritems():
+    for key, prop in model._properties.iteritems():
         value = getattr(model, key)
         output[key] = unicode(value)
 
@@ -83,12 +82,13 @@ class Activities(webapp2.RequestHandler):
     def get(self):
         u"""アクティビティを返却する."""
         def _groupby_user(stage_user):
-            return {'screenName': stage_user.user.screenName,
-                    'image': stage_user.user.image}
+            user = stage_user.user.get()
+            return {'screenName': user.screenName,
+                    'image': user.image}
 
         def _stageuser_to_dict(obj):
             return [{'clearDate': str(o.clearDate),
-                     'stageNo': o.stage.stageNo}
+                     'stageNo': o.stage.get().stageNo}
                     for o in obj]
         stageUsers = StageUser.gql('ORDER BY clearDate DESC').fetch(limit=50)
         from itertools import groupby
@@ -125,18 +125,18 @@ class Stages(webapp2.RequestHandler):
         twitter_user = get_user(cookie)
 
         puzzles = (KyouenPuzzle
-                   .all()
-                   .filter('stageNo >', (pageNo-1) * page_per_count)
-                   .order('stageNo')
+                   .query()
+                   .filter(KyouenPuzzle.stageNo > (pageNo-1) * page_per_count)
+                   .order(KyouenPuzzle.stageNo)
                    .fetch(limit=page_per_count))
         user = None
         if twitter_user:
             from html import User
-            user = User.get_by_key_name(User.create_key(twitter_user.userId))
+            user = User.get_by_id(User.create_key(twitter_user.userId))
 
         def has_stage_user(puzzle, user):
             clear = (StageUser
-                     .gql("WHERE stage = :1 AND user = :2", puzzle, user)
+                     .gql("WHERE stage = :1 AND user = :2", puzzle.key, user.key)
                      .get())
             return clear is not None
 
@@ -157,7 +157,7 @@ class Rankings(webapp2.RequestHandler):
     def get(self):
         u"""ランキングを取得する."""
         from html import User
-        users = User.all().order('-clearStageCount')
+        users = User.query().order(-User.clearStageCount)
 
         response_json = json.dumps([dict(screenName=u.screenName,
                                          image=u.image,

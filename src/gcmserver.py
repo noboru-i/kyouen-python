@@ -4,16 +4,16 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 from const import Const
 
 # GCMモデル
-class GcmModel(db.Model):
+class GcmModel(ndb.Model):
     # 登録ID
-    registrationId = db.StringProperty()
+    registrationId = ndb.StringProperty()
     # 登録日
-    registDate = db.DateTimeProperty(auto_now_add=True)
+    registDate = ndb.DateTimeProperty(auto_now_add=True)
 
 # 登録処理
 class GcmRegist(webapp2.RequestHandler):
@@ -44,7 +44,7 @@ class GcmRegist(webapp2.RequestHandler):
             responseJson = {'message': 'already registed'}
             self.response.write(json.dumps(responseJson))
             return
-        
+
         # 入力データの登録
         model = GcmModel(registrationId=regId)
         model.put()
