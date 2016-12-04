@@ -9,3 +9,11 @@ https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen
 
 ### 共円チェッカー
 https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker
+
+## setup
+
+```
+yarn
+npm run build
+dev_appserver.py .
+```
