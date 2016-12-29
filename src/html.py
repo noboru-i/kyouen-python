@@ -9,10 +9,9 @@ import datetime
 import jinja2
 import webapp2
 import json
-from google.appengine.ext import ndb
 from google.appengine.api import memcache
 
-from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
+from models import KyouenPuzzle, KyouenPuzzleSummary, RequestToken, User, StageUser
 from const import Const
 
 SESSION_EXPIRE = 60 * 60 * 24 * 20 # 60日
@@ -26,30 +25,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 from app import templatefilters
 JINJA_ENVIRONMENT.filters['jst'] = templatefilters.jst
 JINJA_ENVIRONMENT.filters['list_link'] = templatefilters.list_link
-
-class RequestToken(ndb.Model):
-    token_key = ndb.StringProperty(required=True)
-    token_secret = ndb.StringProperty(required=True)
-    creation_date = ndb.DateTimeProperty(auto_now_add=True)
-
-# ユーザデータ
-class User(ndb.Model):
-    userId = ndb.StringProperty(required=True)
-    screenName = ndb.StringProperty()
-    image = ndb.StringProperty()
-    accessToken = ndb.StringProperty()
-    accessSecret = ndb.StringProperty()
-    clearStageCount = ndb.IntegerProperty()
-
-    @staticmethod
-    def create_key(userId):
-        return(USER_KEY_PREFIX + userId)
-
-# ステージ・ユーザ接続データ
-class StageUser(ndb.Model):
-    stage = ndb.KeyProperty(kind=KyouenPuzzle, required=True)
-    user = ndb.KeyProperty(kind=User, required=True)
-    clearDate = ndb.DateTimeProperty(required=True)
 
 # cookieの取得
 def get_cookie():

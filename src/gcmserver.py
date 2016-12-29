@@ -4,16 +4,9 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import ndb
 
+from models import GcmModel
 from const import Const
-
-# GCMモデル
-class GcmModel(ndb.Model):
-    # 登録ID
-    registrationId = ndb.StringProperty()
-    # 登録日
-    registDate = ndb.DateTimeProperty(auto_now_add=True)
 
 # 登録処理
 class GcmRegist(webapp2.RequestHandler):
