@@ -1,0 +1,146 @@
+swagger: '2.0'
+info:
+  title: Kyouen API
+  description: Kyouen server application interface
+  version: "1.0.0"
+host: my-android-server.appspot.com
+schemes:
+  - https
+basePath: /v2
+produces:
+  - application/json
+paths:
+  /stages:
+    get:
+      description: List of kyouen.
+      parameters:
+        - name: offset
+          in: query
+          description: offset of stages.
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit of receiving stages. (default 10.)
+          required: false
+          type: integer
+      tags:
+        - Stages
+      responses:
+        "200":
+          description: An array of stages
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Stage'
+          examples:
+            application/json: |-
+              [
+                {
+                  "stage_no": 1,
+                  "size": 6,
+                  "stage": "000000000000000000000000000000000000",
+                  "creator_name": "foo"
+                },
+                {
+                  "stage_no": 2,
+                  "size": 6,
+                  "stage": "000000000000000000000000000000000000",
+                  "creator_name": "bar"
+                }
+              ]
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Create stage
+      parameters:
+        - name: body
+          in: body
+          description: Size of stage.
+          required: true
+          schema:
+            $ref: '#/definitions/PostStage'
+      tags:
+        - Stages
+      responses:
+        "200":
+          description: Created stages
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Stage'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /stages/recent:
+    get:
+      description: Returns recent added stages.
+      tags:
+        - Stages
+      responses:
+        "200":
+          description: List of stage.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Stage'
+          examples:
+            application/json: |-
+              [
+                {
+                  "stage_no": 2,
+                  "size": 6,
+                  "stage": "000000000000000000000000000000000000",
+                  "creator_name": "foo"
+                },
+                {
+                  "stage_no": 1,
+                  "size": 6,
+                  "stage": "000000000000000000000000000000000000",
+                  "creator_name": "bar"
+                }
+              ]
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  PostStage:
+    type: object
+    required:
+      - size
+      - stage
+    properties:
+      size:
+        type: integer
+        description: Size of stage.
+      stage:
+        type: string
+        description: Stage of stage.
+      creator_name:
+        type: string
+        description: Creator of stage.
+  Stage:
+    type: object
+    allOf:
+      - $ref: '#/definitions/PostStage'
+      - type: object
+        required:
+          - stage_no
+        properties:
+          stage_no:
+            type: integer
+            description: Stage number.
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
