@@ -3,10 +3,10 @@ POST /api/logout
 
 GET  /api/stages
 POST /api/stages
-GET  /api/stages/count <- なんだっけ？
+GET  /api/stages/count <- I forget
 GET  /api/stages/recent
 GET  /api/rankings
-GET  /api/answers
+GET  /api/answers <- I forget
 POST /api/answers
 POST /api/answers/sync
 
