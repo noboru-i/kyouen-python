@@ -5,7 +5,6 @@ import logging
 import tweepy
 import webapp2
 import json
-from google.appengine.ext import ndb
 
 from kyouenserver import RegistModel
 from const import Const

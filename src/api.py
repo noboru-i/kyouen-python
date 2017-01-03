@@ -10,13 +10,12 @@ import webapp2
 import json
 import datetime
 
-from kyouenserver import KyouenPuzzle, KyouenPuzzleSummary
+from models import KyouenPuzzle, KyouenPuzzleSummary
 from html import StageUser
 from const import Const
 
 
 SIMPLE_TYPES = (int, long, float, bool, dict, basestring, list)
-
 
 def to_dict(model):
     u"""modelをdictionaryに変換する."""

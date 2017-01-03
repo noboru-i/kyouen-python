@@ -4,14 +4,7 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import ndb
-
-# APNSモデル
-class ApnsModel(ndb.Model):
-    # 登録ID
-    deviceToken = ndb.StringProperty()
-    # 登録日
-    registDate = ndb.DateTimeProperty(auto_now_add=True)
+from models import ApnsModel
 
 # 登録処理
 class ApnsRegist(webapp2.RequestHandler):

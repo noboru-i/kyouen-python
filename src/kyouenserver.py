@@ -4,7 +4,6 @@
 import logging
 import webapp2
 import json
-from google.appengine.ext import ndb
 
 # 時計回りに90度回転させる。
 def rot(stage, size):
@@ -24,33 +23,6 @@ def mirror(stage, size):
         l2.reverse()
         temp.extend(l2)
     return ''.join(temp)
-
-# パズルのステージ情報
-class KyouenPuzzle(ndb.Model):
-    # ステージ番号
-    stageNo = ndb.IntegerProperty(required=True)
-    # サイズ
-    size = ndb.IntegerProperty(required=True)
-    # ステージ上の石の配置
-    stage = ndb.StringProperty(required=True)
-    # 作者
-    creator = ndb.StringProperty()
-    # 登録日
-    registDate = ndb.DateTimeProperty(auto_now_add=True)
-
-# ステージ情報サマリ
-class KyouenPuzzleSummary(ndb.Model):
-    # ステージ合計
-    count = ndb.IntegerProperty()
-    # 最終更新日時
-    lastDate = ndb.DateTimeProperty(auto_now_add=True)
-
-# 登録情報
-class RegistModel(ndb.Model):
-    # ステージ情報
-    stageInfo = ndb.KeyProperty(required=True, kind=KyouenPuzzle)
-    # 登録日
-    registDate = ndb.DateTimeProperty(required=True, auto_now_add=True)
 
 # 登録処理
 class KyouenRegist(webapp2.RequestHandler):
