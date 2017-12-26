@@ -4,6 +4,8 @@
 
 from google.appengine.ext import ndb
 
+USER_KEY_PREFIX = 'KEY'
+
 # パズルのステージ情報
 class KyouenPuzzle(ndb.Model):
     # ステージ番号

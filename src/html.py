@@ -16,8 +16,6 @@ from const import Const
 
 SESSION_EXPIRE = 60 * 60 * 24 * 20 # 60日
 
-USER_KEY_PREFIX = 'KEY'
-
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), 'template')),
     extensions=['jinja2.ext.autoescape'])

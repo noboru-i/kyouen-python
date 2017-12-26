@@ -1,19 +1,34 @@
-# 共円 for Google App Engine(python)
+# 共円 in Google App Engine(python)
 
-## 稼働中の環境
-http://my-android-server.appspot.com/
+## Production environment
 
-## Androidアプリ
+https://my-android-server.appspot.com/
+
+## App for Android
+
 ### 詰め共円
+
 https://market.android.com/details?id=hm.orz.chaos114.android.tumekyouen
 
 ### 共円チェッカー
+
 https://market.android.com/details?id=hm.orz.chaos114.android.kyouenchecker
 
-## setup
+## Setup and run
+
+Install Google Cloud SDK
+https://cloud.google.com/appengine/docs/standard/python/download
 
 ```
+cd src
 yarn
 npm run build
 dev_appserver.py .
+```
+
+## Deploy
+
+```
+cd src
+gcloud app deploy app.yaml
 ```

@@ -5,6 +5,8 @@ import logging
 import webapp2
 import json
 
+from models import KyouenPuzzle, KyouenPuzzleSummary, RegistModel
+
 # 時計回りに90度回転させる。
 def rot(stage, size):
     l = list(stage)

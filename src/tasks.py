@@ -6,10 +6,8 @@ import tweepy
 import webapp2
 import json
 
-from kyouenserver import RegistModel
+from models import RegistModel, GcmModel, ApnsModel
 from const import Const
-from gcmserver import GcmModel
-from apnsserver import ApnsModel
 
 # https://github.com/djacobs/PyAPNs/blob/master/apns.py
 from libs.pyapns.apns import APNs, Payload, PayloadAlert
