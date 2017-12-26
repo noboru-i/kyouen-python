@@ -5,6 +5,7 @@ import logging
 import tweepy
 import webapp2
 import json
+from google.appengine.ext import ndb
 
 from models import RegistModel, GcmModel, ApnsModel
 from const import Const
