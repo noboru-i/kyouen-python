@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.4
-    working_directory: ~/repo
+    working_directory: ~/project
 
     steps:
       - checkout
@@ -12,10 +12,14 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "kyouen-react/package.json" }}
           - v1-dependencies-
-      - run: yarn install
+      - run:
+          command: yarn install
+          working_directory: ~/project/kyouen-react
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "kyouen-react/package.json" }}
 
-      - run: yarn test
+      - run:
+          command: yarn test
+          working_directory: ~/project/kyouen-react
