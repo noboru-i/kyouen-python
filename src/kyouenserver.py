@@ -119,7 +119,7 @@ class KyouenRegist(webapp2.RequestHandler):
         # サマリの再計算
         summary = KyouenPuzzleSummary.query().get()
         if not summary:
-            c = KyouenPuzzle.all().count()
+            c = KyouenPuzzle.query().count()
             summary = KyouenPuzzleSummary(count=c)
         else:
             summary.count += 1

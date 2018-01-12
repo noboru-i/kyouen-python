@@ -267,7 +267,7 @@ class AddStageUser(webapp2.RequestHandler):
             # 新規クリア時はUser.clearStageCountをインクリメント
             count = user.clearStageCount
             if not count:
-                count = StageUser.gql('WHERE user = :1', user).count()
+                count = StageUser.gql('WHERE user = :1', user.key).count()
             user.clearStageCount = count + 1
             user.put()
         else:
