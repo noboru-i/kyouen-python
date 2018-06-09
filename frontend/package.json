@@ -4,7 +4,7 @@
     "dev": "nuxt"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "@nuxtjs/axios": "^5.3.1",
     "nuxt": "^1.4.1"
   },
   "devDependencies": {
