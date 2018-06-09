@@ -15,7 +15,7 @@
 <script>
 export default {
   async asyncData({ params, app}) {
-    const stages = await app.$axios.$get('http://my-android-server.appspot.com/api/recent_stages')
+    const stages = await app.$axios.$get(location.href + 'api/recent_stages')
 
     return {stages}
   }

@@ -1,7 +1,5 @@
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  mode: 'spa',
   head: {
     title: '{{ name }}',
     meta: [
@@ -13,16 +11,11 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress bar color
-  */
   loading: { color: '#3B8070' },
   modules: [
     '@nuxtjs/axios',
   ],
-  /*
-  ** Build configuration
-  */
+
   build: {
     /*
     ** Run ESLint on save
