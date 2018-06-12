@@ -2,11 +2,12 @@
   "name": "my-app",
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "API_URL=/ nuxt build",
     "start": "nuxt start"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
+    "@nuxtjs/proxy": "^1.2.4",
     "nuxt": "^1.4.1"
   },
   "devDependencies": {

@@ -14,7 +14,12 @@ module.exports = {
   loading: { color: '#3B8070' },
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
+
+  proxy: {
+    '/api': 'https://my-android-server.appspot.com'
+  },
 
   build: {
     /*
