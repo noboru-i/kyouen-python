@@ -8,6 +8,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/proxy": "^1.2.4",
+    "@nuxtjs/vuetify": "^0.4.2",
     "nuxt": "^1.4.1"
   },
   "devDependencies": {

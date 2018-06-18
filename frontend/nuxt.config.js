@@ -13,6 +13,7 @@ module.exports = {
   },
   loading: { color: '#3B8070' },
   modules: [
+    '@nuxtjs/vuetify',
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],

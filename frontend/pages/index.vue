@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>共円</h1>
     <div>
       <h2>最新の登録</h2>
       <ul id="example-1">
