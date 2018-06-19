@@ -1,22 +1,24 @@
 <template>
   <div>
-    <div>
-      <h2>最新の登録</h2>
-      <ul id="example-1">
-        <li v-for="stage in stages" :key="stage.id">
-          STAGE:{{ stage.stageNo }} - {{ stage.registDate }}
-        </li>
-      </ul>
-    </div>
+    <RecentWidget />
   </div>
 </template>
 
 <script>
-export default {
-  async asyncData({ params, app}) {
-    const stages = await app.$axios.$get('/api/recent_stages')
+import RecentWidget from '~/components/RecentWidget.vue'
 
-    return {stages}
+export default {
+  components: {
+    RecentWidget
+  },
+  head() {
+    return {
+      title: 'トップページ'
+    }
+  },
+  async asyncData({ params, store }) {
+    await store.dispatch('recent/fetchRecentStages');
+    return {}
   }
 }
 </script>
