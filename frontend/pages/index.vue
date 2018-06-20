@@ -1,17 +1,24 @@
 <template>
-  <div>
-    <v-flex sm6>
-      <RecentWidget />
-    </v-flex>
-  </div>
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex xs12 sm6>
+        <RecentWidget />
+      </v-flex>
+      <v-flex xs12 sm6>
+        <ActivityWidget />
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import RecentWidget from '~/components/RecentWidget.vue'
+import ActivityWidget from '~/components/ActivityWidget.vue'
 
 export default {
   components: {
-    RecentWidget
+    RecentWidget,
+    ActivityWidget
   },
   head() {
     return {
