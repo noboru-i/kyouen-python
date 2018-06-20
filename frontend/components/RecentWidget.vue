@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <div>
-      <h2>最新の登録</h2>
-      <ul id="example-1">
-        <li v-for="stage in stages" :key="stage.id">
-          STAGE:{{ stage.stageNo }} - {{ stage.registDate }}
-        </li>
-      </ul>
-    </div>
-  </div>
+  <v-card>
+    <v-card-title primary-title>
+      <div>
+        <h3 class="headline mb-2">最新の登録</h3>
+        <ul id="example-1">
+          <li v-for="stage in stages" :key="stage.id">
+            STAGE:{{ stage.stageNo }} - {{ stage.registDate }}
+          </li>
+        </ul>
+      </div>
+    </v-card-title>
+  </v-card>
 </template>
 
 <script>
@@ -20,3 +22,9 @@ export default {
   })
 }
 </script>
+
+<style lang="postcss" scoped>
+ul {
+  list-style-type: none;
+}
+</style>

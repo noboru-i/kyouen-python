@@ -1,6 +1,8 @@
 <template>
   <div>
-    <RecentWidget />
+    <v-flex sm6>
+      <RecentWidget />
+    </v-flex>
   </div>
 </template>
 
