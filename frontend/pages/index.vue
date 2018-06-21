@@ -26,7 +26,10 @@ export default {
     }
   },
   async asyncData({ params, store }) {
-    await store.dispatch('recent/fetchRecentStages');
+    await Promise.all([
+      store.dispatch('recent/fetchRecentStages'),
+      store.dispatch('activity/fetchActivities')
+    ]);
     return {}
   }
 }

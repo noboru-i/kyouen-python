@@ -4,8 +4,8 @@
       <div>
         <h3 class="headline mb-2">アクティビティ</h3>
         <ul id="example-1">
-          <li v-for="stage in stages" :key="stage.id">
-            STAGE:{{ stage.stageNo }} - {{ stage.registDate }}
+          <li v-for="activity in activities" :key="activity.stageNo">
+            STAGE:{{ activity.stageNo }} - {{ activity.clearDate }}
           </li>
         </ul>
       </div>
@@ -18,7 +18,7 @@ import { mapState } from 'vuex'
 
 export default {
   computed: mapState({
-    stages: state => state.recent.list
+    activities: state => state.activity.list
   })
 }
 </script>
