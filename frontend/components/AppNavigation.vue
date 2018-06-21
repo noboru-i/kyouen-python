@@ -1,19 +1,28 @@
 <template>
   <v-list dense>
     <v-list-tile  @click="moveToHome">
-      <v-list-tile-action>
-        <v-icon>home</v-icon>
-      </v-list-tile-action>
       <v-list-tile-content>
-        <v-list-tile-title>Home</v-list-tile-title>
+        <v-list-tile-title>共円</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile>
     <v-list-tile>
-      <v-list-tile-action>
-        <v-icon>contact_mail</v-icon>
-      </v-list-tile-action>
       <v-list-tile-content>
-        <v-list-tile-title>Contact</v-list-tile-title>
+        <v-list-tile-title>ステージ一覧</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile>
+      <v-list-tile-content>
+        <v-list-tile-title>ステージ作成</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile>
+      <v-list-tile-content>
+        <v-list-tile-title>ランキング</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile>
+      <v-list-tile-content>
+        <v-list-tile-title>アプリ</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile>
   </v-list>

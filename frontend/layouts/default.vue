@@ -2,6 +2,7 @@
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
+      width="180"
       app
     >
       <AppNavigation />
@@ -9,6 +10,10 @@
     <v-toolbar color="indigo" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>共円</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn flat>ログイン</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
