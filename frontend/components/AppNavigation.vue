@@ -1,11 +1,11 @@
 <template>
   <v-list dense>
-    <v-list-tile  @click="moveToHome">
+    <v-list-tile to="/">
       <v-list-tile-content>
         <v-list-tile-title>共円</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile>
+    <v-list-tile to="/list">
       <v-list-tile-content>
         <v-list-tile-title>ステージ一覧</v-list-tile-title>
       </v-list-tile-content>
@@ -27,13 +27,3 @@
     </v-list-tile>
   </v-list>
 </template>
-
-<script>
-export default {
-  methods: {
-    moveToHome() {
-      return;
-    }
-  }
-}
-</script>
