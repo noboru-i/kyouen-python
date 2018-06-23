@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "nuxt",
     "build": "API_URL=/ nuxt build",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "storybook": "start-storybook -p 9001"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
@@ -12,6 +13,7 @@
     "nuxt": "^1.4.1"
   },
   "devDependencies": {
+    "@storybook/vue": "^3.4.8",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",
