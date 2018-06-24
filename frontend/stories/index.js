@@ -21,4 +21,14 @@ storiesOf('ActivityWidget', module)
         }
       }
     })
-  }))
+  }));
+
+import Kyouen from '../components/Kyouen.vue'
+
+storiesOf('Kyouen', module)
+  .add('normal', () => ({
+    components: { Kyouen },
+    template: `
+      <Kyouen stage="100000110000000000000000000000000001" />
+    `
+  }));
