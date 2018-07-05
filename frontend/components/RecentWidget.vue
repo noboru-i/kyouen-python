@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 ul {
   list-style-type: none;
 }

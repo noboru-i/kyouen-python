@@ -1,21 +1,24 @@
 {
   "name": "my-app",
+  "repository": "https://github.com/noboru-i/kyouen-python",
+  "license": "MIT",
   "scripts": {
     "dev": "nuxt",
     "build": "API_URL=/ nuxt build",
     "start": "nuxt start",
-    "storybook": "start-storybook -p 9001"
+    "storybook": "start-storybook -p 9001",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/proxy": "^1.2.4",
     "@nuxtjs/vuetify": "^0.4.2",
-    "nuxt": "^1.4.1"
+    "nuxt-edge": "^2.0.0-25511667.1dc8b06"
   },
   "devDependencies": {
-    "@storybook/vue": "^3.4.8",
-    "babel-eslint": "^8.2.3",
-    "eslint": "^4.19.1",
+    "@storybook/vue": "^4.0.0-alpha.12",
+    "babel-eslint": "^8.2.5",
+    "eslint": "^5.0.1",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.5.0"
