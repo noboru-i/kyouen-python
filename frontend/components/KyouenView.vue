@@ -21,6 +21,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Kyouen, Point } from 'kyouen'
 
 const boardSize = 6;
 
@@ -38,6 +39,22 @@ class TumeKyouen {
   selecWithIndext(index) {
     const c = this.stage.charAt(index);
     this.stage = this.stage.replaceCharAt(index, this.getNextChar(c));
+
+    const whiteCount = this.stage.split("").reduce((accumulator, currentValue) => {
+      return accumulator + (currentValue === "2" ? 1 : 0)
+    }, 0);
+    if (whiteCount === 4) {
+      var stones = []
+      this.stage.split("").forEach((val, index) => {
+        if (val === '2') {
+          const x = index % boardSize;
+          const y = Math.floor(index / boardSize);
+          stones.push(new Point(x, y));
+        }
+      });
+
+      console.log(new Kyouen(stones).hasKyouen());
+    }
   }
 
   getNextChar(char) {

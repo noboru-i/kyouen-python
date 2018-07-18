@@ -13,6 +13,7 @@
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/proxy": "^1.2.4",
     "@nuxtjs/vuetify": "^0.4.2",
+    "kyouen": "0.0.1",
     "nuxt-edge": "^2.0.0-25511667.1dc8b06"
   },
   "devDependencies": {

@@ -23,12 +23,12 @@ storiesOf('ActivityWidget', module)
     })
   }));
 
-import Kyouen from '../components/Kyouen.vue'
+import KyouenView from '../components/KyouenView.vue'
 
-storiesOf('Kyouen', module)
+storiesOf('KyouenView', module)
   .add('normal', () => ({
-    components: { Kyouen },
+    components: { KyouenView },
     template: `
-      <Kyouen stage="100000110000000000000000000000000001" />
+      <KyouenView stage="000000010000001100001100000000001000" />
     `
   }));
