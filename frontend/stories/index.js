@@ -32,3 +32,13 @@ storiesOf('KyouenView', module)
       <KyouenView stage="000000010000001100001100000000001000" />
     `
   }));
+
+import TumeKyouen from '../components/TumeKyouen.vue'
+
+storiesOf('TumeKyouen', module)
+  .add('normal', () => ({
+    components: { TumeKyouen },
+    template: `
+      <TumeKyouen stage="000000010000001100001100000000001000" />
+    `
+  }));

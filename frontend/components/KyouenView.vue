@@ -1,6 +1,6 @@
 <template>
-  <div class="green background">
-    <svg id="background-image" width="336px" height="336px">
+  <div class="green" :style="{width: width + 'px'}">
+    <svg id="background-image" :width="width + 'px'" :height="width + 'px'">
       <line x1="0" :y1="(index + 0.5) * stoneSize" :x2="width" :y2="(index + 0.5) * stoneSize"
           :key="'row_' + index"
           stroke="#000"
@@ -15,86 +15,28 @@
         :class="{hide: stone == '0', 'darken-3': stone == '1', 'lighten-5': stone == '2'}"
         v-for="(stone, index) in stageArray"
         :key="index"
-        @click="onClick(index)" />
+        @click="$emit('on-stone-click', index)" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { Kyouen, Point } from 'kyouen'
-
-const boardSize = 6;
-
-String.prototype.replaceCharAt = function(at, replaceChar) {
-  const before = this.substring(0, at);
-  const after = this.slice(at + 1);
-  return before + replaceChar + after;
-};
-
-class TumeKyouen {
-  constructor(stage) {
-    this.stage = stage;
-  }
-
-  selecWithIndext(index) {
-    const c = this.stage.charAt(index);
-    this.stage = this.stage.replaceCharAt(index, this.getNextChar(c));
-
-    const whiteCount = this.stage.split("").reduce((accumulator, currentValue) => {
-      return accumulator + (currentValue === "2" ? 1 : 0)
-    }, 0);
-    if (whiteCount === 4) {
-      var stones = []
-      this.stage.split("").forEach((val, index) => {
-        if (val === '2') {
-          const x = index % boardSize;
-          const y = Math.floor(index / boardSize);
-          stones.push(new Point(x, y));
-        }
-      });
-
-      console.log(new Kyouen(stones).hasKyouen());
-    }
-  }
-
-  getNextChar(char) {
-    if (char === '1') {
-      return '2';
-    } else if (char === '2') {
-      return '1';
-    }
-    return char;
-  }
-}
-
 export default {
-  data: function() {
-    return {
-      width: 336,
-      kyouen: new TumeKyouen(this.stage)
-    }
-  },
-  props: ['stage'],
+  props: ['stage', 'width'],
   computed: {
+    boardSize: function() {
+      return Math.sqrt(this.stage.length);
+    },
     stoneSize: function() {
-      return this.width / boardSize;
+      return this.width / this.boardSize;
     },
     stageArray: function() {
-      return this.kyouen.stage.split('');
-    }
-  },
-  methods: {
-    onClick: function (index) {
-      this.kyouen.selecWithIndext(index);
+      return this.stage.split('');
     }
   }
 }
 </script>
 
 <style scoped>
-.background {
-  width: 336px;
-}
 #background-image {
   position: absolute;
 }
