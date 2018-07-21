@@ -19,6 +19,11 @@
       "label": "KyouenView normal",
       "url": "http://localhost:9001/iframe.html?selectedKind=KyouenView&selectedStory=normal",
       "misMatchThreshold": 0.0000000001
+    },
+    {
+      "label": "TumeKyouen normal",
+      "url": "http://localhost:9001/iframe.html?selectedKind=TumeKyouen&selectedStory=normal",
+      "misMatchThreshold": 0.0000000001
     }
   ],
   "paths": {
