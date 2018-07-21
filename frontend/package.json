@@ -7,7 +7,9 @@
     "build": "API_URL=/ nuxt build",
     "start": "nuxt start",
     "storybook": "start-storybook -p 9001",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "spec:visual": "backstop reference",
+    "test:visual": "backstop test"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
@@ -19,6 +21,7 @@
   "devDependencies": {
     "@storybook/vue": "^4.0.0-alpha.14",
     "babel-eslint": "^8.2.6",
+    "backstopjs": "^3.5.2",
     "eslint": "^5.2.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.0",
