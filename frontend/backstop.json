@@ -1,5 +1,5 @@
 {
-  "id": "backstop_default",
+  "id": "kyouen_components",
   "viewports": [
     {
       "label": "phone",
@@ -16,23 +16,9 @@
   "onReadyScript": "puppet/onReady.js",
   "scenarios": [
     {
-      "label": "BackstopJS Homepage",
-      "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "https://garris.github.io/BackstopJS/",
-      "referenceUrl": "",
-      "readyEvent": "",
-      "readySelector": "",
-      "delay": 0,
-      "hideSelectors": [],
-      "removeSelectors": [],
-      "hoverSelector": "",
-      "clickSelector": "",
-      "postInteractionWait": 0,
-      "selectors": [],
-      "selectorExpansion": true,
-      "expect": 0,
-      "misMatchThreshold" : 0.1,
-      "requireSameDimensions": true
+      "label": "KyouenView normal",
+      "url": "http://localhost:9001/iframe.html?selectedKind=KyouenView&selectedStory=normal",
+      "misMatchThreshold": 0.0000000001
     }
   ],
   "paths": {
