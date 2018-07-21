@@ -29,7 +29,9 @@ storiesOf('KyouenView', module)
   .add('normal', () => ({
     components: { KyouenView },
     template: `
-      <KyouenView stage="000000010000001100001100000000001000" />
+      <KyouenView
+          stage="000000010000001100001100000000001000"
+          width="336" />
     `
   }));
 
