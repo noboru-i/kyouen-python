@@ -1,14 +1,6 @@
 <template>
-  <div class="green" :style="{width: width + 'px', height: width + 'px'}">
-    <svg id="background-image" :width="width + 'px'" :height="width + 'px'">
-      <line x1="0" :y1="(index + 0.5) * stoneSize" :x2="width" :y2="(index + 0.5) * stoneSize"
-          :key="'row_' + index"
-          stroke="#000"
-          v-for="index in Array.from({length: 6}, (v, k) => k)"/>
-      <line :x1="(index + 0.5) * stoneSize" y1="0" :x2="(index + 0.5) * stoneSize" :y2="width"
-          :key="'col_' + index"
-          stroke="#000"
-          v-for="index in Array.from({length: 6}, (v, k) => k)"/>
+  <div :style="{width: width + 'px', height: width + 'px'}">
+    <svg :width="width + 'px'" :height="width + 'px'">
       <line
           :x1="computedLine.startX" :y1="computedLine.startY"
           :x2="computedLine.stopX" :y2="computedLine.stopY"
@@ -47,7 +39,6 @@ export default {
     computedLine: function() {
       let offset = this.stoneSize * 0.5;
       const line = this.kyouenData.line;
-      console.log(this.kyouenData);
       if (line.a === 0) {
         return {
           startX: 0,
@@ -83,15 +74,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#background-image {
-  position: absolute;
-}
-.v-btn {
-  margin: 0;
-}
-.v-btn.hide {
-  opacity: 0;
-}
-</style>

@@ -52,11 +52,13 @@ storiesOf('OverlayKyouenResult', module)
   .add('circle', () => ({
     components: { OverlayKyouenResult },
     template: `
-      <OverlayKyouenResult
-          boardSize="6"
-          width="336"
-          :kyouen-data="kyouenData"
-          />
+      <div style="background-color: #4caf50; width: 336px; height: 336px;">
+        <OverlayKyouenResult
+            boardSize="6"
+            width="336"
+            :kyouen-data="kyouenData"
+            />
+      </div>
     `,
     computed: {
       kyouenData () {
@@ -71,11 +73,13 @@ storiesOf('OverlayKyouenResult', module)
   .add('line', () => ({
     components: { OverlayKyouenResult },
     template: `
-      <OverlayKyouenResult
-          boardSize="6"
-          width="336"
-          :kyouen-data="kyouenData"
-          />
+      <div style="background-color: #4caf50; width: 336px; height: 336px;">
+        <OverlayKyouenResult
+            boardSize="6"
+            width="336"
+            :kyouen-data="kyouenData"
+            />
+      </div>
     `,
     computed: {
       kyouenData () {
