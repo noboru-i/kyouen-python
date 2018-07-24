@@ -6,14 +6,14 @@
           :x2="computedLine.stopX" :y2="computedLine.stopY"
           stroke="#fff"
           stroke-width="3"
-          v-if="kyouenData.lineKyouen === true"
+          v-if="kyouenData && kyouenData.lineKyouen === true"
           />
       <circle :cx="computedCenter.x" :cy="computedCenter.y" :r="computedRadius"
           stroke="#fff"
           stroke-width="3"
           fill="#fff"
           fill-opacity="0.1"
-          v-else="kyouenData.lineKyouen ==== true"
+          v-if="kyouenData && kyouenData.lineKyouen === false"
           />
     </svg>
   </div>

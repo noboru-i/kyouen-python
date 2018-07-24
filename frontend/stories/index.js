@@ -49,6 +49,27 @@ import OverlayKyouenResult from '../components/OverlayKyouenResult.vue';
 import { Point, Kyouen } from 'kyouen';
 
 storiesOf('OverlayKyouenResult', module)
+  .add('none', () => ({
+    components: { OverlayKyouenResult },
+    template: `
+      <div style="background-color: #4caf50; width: 336px; height: 336px;">
+        <OverlayKyouenResult
+            boardSize="6"
+            width="336"
+            :kyouen-data="kyouenData"
+            />
+      </div>
+    `,
+    computed: {
+      kyouenData () {
+        return new Kyouen([
+          new Point(0, 0),
+          new Point(2, 3),
+          new Point(3, 2),
+          new Point(3, 3)]).hasKyouen();
+      },
+    }
+  }))
   .add('circle', () => ({
     components: { OverlayKyouenResult },
     template: `
