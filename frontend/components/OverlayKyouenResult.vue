@@ -4,15 +4,15 @@
       <line
           :x1="computedLine.startX" :y1="computedLine.startY"
           :x2="computedLine.stopX" :y2="computedLine.stopY"
-          stroke="#fff"
+          stroke="#F44336"
           stroke-width="3"
           v-if="kyouenData && kyouenData.lineKyouen === true"
           />
       <circle :cx="computedCenter.x" :cy="computedCenter.y" :r="computedRadius"
-          stroke="#fff"
+          stroke="#F44336"
           stroke-width="3"
           fill="#fff"
-          fill-opacity="0.1"
+          fill-opacity="0.3"
           v-if="kyouenData && kyouenData.lineKyouen === false"
           />
     </svg>

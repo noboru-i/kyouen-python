@@ -4,6 +4,13 @@
         :stage="kyouen.stage"
         :width="width"
         @on-stone-click="onStoneClick" />
+    <OverlayKyouenResult
+        class="overlay"
+        :boardSize="boardSize"
+        :width="width"
+        :kyouen-data="kyouenData"
+        v-if="kyouenData !== null"
+        />
     <v-btn
         color="primary"
         @click="onClick()"
@@ -15,6 +22,7 @@
 import { Kyouen, Point } from 'kyouen'
 
 import KyouenView from './KyouenView'
+import OverlayKyouenResult from './OverlayKyouenResult'
 
 String.prototype.replaceCharAt = function(at, replaceChar) {
   const before = this.substring(0, at);
@@ -46,14 +54,16 @@ export default {
   data: function() {
     return {
       width: 336,
-      kyouen: new TumeKyouenState(this.stage)
+      kyouen: new TumeKyouenState(this.stage),
+      kyouenData: null
     }
   },
   props: ['stage'],
   components: {
-    KyouenView
+    KyouenView,
+    OverlayKyouenResult
   },
-    computed: {
+  computed: {
     boardSize: function() {
       return Math.sqrt(this.stage.length);
     },
@@ -84,13 +94,19 @@ export default {
         }
       });
 
-      console.log(new Kyouen(stones).hasKyouen());
+      this.kyouenData = new Kyouen(stones).hasKyouen()
+      console.log(this.kyouenData);
     }
   }
 }
 </script>
 
 <style scoped>
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .v-btn {
   margin: 0;
 }
