@@ -17,8 +17,43 @@ storiesOf('ActivityWidget', module)
           list: [{
             stageNo: 1,
             clearDate: '2018-06-22 09:34:19.613883'
+          },{
+            stageNo: 2,
+            clearDate: '2018-06-23 09:34:19.613883'
           }]
         }
+      }
+    })
+  }));
+
+import RecentRegisteredStages from '../components/RecentRegisteredStages.vue';
+
+storiesOf('RecentRegisteredStages', module)
+  .add('normal', () => ({
+    components: { RecentRegisteredStages },
+    template: `
+      <div style="margin: 8px;">
+        <RecentRegisteredStages />
+      </div>
+    `,
+    store: new Vuex.Store({
+      state: {
+        recentStages: [
+          {
+            creator: "creator 1",
+            registerDate: "2018-07-19 23:44:08.676340",
+            size: "6",
+            stage: "100001010100000000111000001000010001",
+            stageNo: "2622"
+          },
+          {
+            creator: "creator 1",
+            registerDate: "2018-07-19 23:42:54.894330",
+            size: "6",
+            stage: "100001010101000000011000000000010001",
+            stageNo: "2621"
+          },
+        ]
       }
     })
   }));

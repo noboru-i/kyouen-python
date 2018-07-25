@@ -3,7 +3,7 @@
     <v-card-title primary-title>
       <div>
         <h3 class="headline mb-2">アクティビティ</h3>
-        <ul id="example-1">
+        <ul>
           <li v-for="activity in activities" :key="activity.stageNo">
             STAGE:{{ activity.stageNo }} - {{ activity.clearDate }}
           </li>
