@@ -10,6 +10,10 @@ handlers:
   static_files: robots.txt
   upload: robots\.txt
 
+- url: /.well-known/assetlinks.json
+  static_files: well-known/assetlinks.json
+  upload: \well\-known/assetlinks\.json
+
 - url: /js
   static_dir: js
 
