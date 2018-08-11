@@ -1,0 +1,20 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "hm.orz.chaos114.android.tumekyouen.debug",
+            "sha256_cert_fingerprints":
+            ["C0:D7:F9:34:D8:F7:15:06:FA:21:FA:0D:CF:09:E5:C4:E2:66:D4:11:5D:72:E0:D7:B8:38:F9:49:AB:C7:A4:F0"]
+        }
+    },
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "hm.orz.chaos114.android.tumekyouen",
+            "sha256_cert_fingerprints":
+            ["6E:5A:DB:69:B4:C3:28:AC:DA:7F:00:A7:4D:5D:CD:F9:ED:87:0B:5D:D2:71:C5:89:64:DF:13:38:5A:5B:B8:A2"]
+        }
+    }
+]
