@@ -12,7 +12,11 @@ handlers:
 
 - url: /.well-known/assetlinks.json
   static_files: well-known/assetlinks.json
-  upload: \well\-known/assetlinks\.json
+  upload: well\-known/assetlinks\.json
+
+- url: /.well-known/apple-app-site-association
+  static_files: well-known/apple-app-site-association
+  upload: well\-known/apple-app-site-association
 
 - url: /js
   static_dir: js
