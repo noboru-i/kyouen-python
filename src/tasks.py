@@ -135,7 +135,7 @@ class TweetTask(webapp2.RequestHandler):
         # FCMで送信
         sendFcmAll()
         # APNSで送信
-        sendApnsAll()
+        # sendApnsAll()
         return
 
 application = webapp2.WSGIApplication([('/tasks/tweet', TweetTask),
