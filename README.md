@@ -21,6 +21,7 @@ https://cloud.google.com/appengine/docs/standard/python/download
 
 ```
 cd src
+pip install -t lib -r requirements.txt
 yarn
 npm run build
 dev_appserver.py .
