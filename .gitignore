@@ -8,3 +8,5 @@
 /src/html/
 /.tags
 /.tags_sorted_by_file
+
+/src/lib
