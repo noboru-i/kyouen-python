@@ -2,7 +2,7 @@
 
 ## Production environment
 
-https://my-android-server.appspot.com/
+https://kyouen.app/
 
 ## App for Android
 

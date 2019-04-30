@@ -3,7 +3,7 @@ info:
   title: Kyouen API
   description: Kyouen server application interface
   version: "1.0.0"
-host: my-android-server.appspot.com
+host: kyouen.app
 schemes:
   - https
 basePath: /v2

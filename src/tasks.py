@@ -74,7 +74,7 @@ class TweetTask(webapp2.RequestHandler):
         import math
         pageNo = math.floor((minStageNo - 1) / 10) + 1
         message = (creator + u'によって、ステージ：' + stage + u'が登録されました。 '
-                   u'http://my-android-server.appspot.com/html/list.html?page_no=%d&open=%d #共円') % (pageNo, min(l))
+                   u'http://kyouen.app/html/list.html?page_no=%d&open=%d #共円') % (pageNo, min(l))
         logging.info('message=' + message)
 
         try:

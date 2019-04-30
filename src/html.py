@@ -257,7 +257,7 @@ class AddStageUser(webapp2.RequestHandler):
             user = User.get_or_insert(User.create_key('0'),
                                       userId='0',
                                       screenName='Guest',
-                                      image='http://my-android-server.appspot.com/image/icon.png')
+                                      image='http://kyouen.app/image/icon.png')
         stage_user = StageUser.gql('WHERE stage = :1 AND user = :2', stage.key, user.key).get()
         if not stage_user:
             # 存在しない場合は新規作成
